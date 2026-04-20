@@ -28,6 +28,17 @@ use super::{Imgs, Message};
 
 const INPUT_TEXT_SIZE: u16 = 20;
 
+/// RGB colour for an active/selected mode button (bright green tint).
+const MODE_ACTIVE_COLOR: (u8, u8, u8) = (97, 255, 18);
+/// RGB colour for an inactive/deselected mode button (dim olive tint).
+const MODE_INACTIVE_COLOR: (u8, u8, u8) = (97, 97, 25);
+
+/// Returns `MODE_ACTIVE_COLOR` when `active` is `true`, `MODE_INACTIVE_COLOR`
+/// otherwise. Used for PvP/PvE and difficulty toggle buttons.
+fn mode_btn_color(active: bool) -> (u8, u8, u8) {
+    if active { MODE_ACTIVE_COLOR } else { MODE_INACTIVE_COLOR }
+}
+
 #[derive(Clone)]
 pub enum Confirmation {
     Regenerate(usize),
@@ -642,11 +653,6 @@ impl Screen {
             }
 
             // PvP / PvE mode toggle
-            const MODE_ACTIVE_COLOR: (u8, u8, u8) = (97, 255, 18);
-            const MODE_INACTIVE_COLOR: (u8, u8, u8) = (97, 97, 25);
-            let mode_btn_color = |active: bool| -> (u8, u8, u8) {
-                if active { MODE_ACTIVE_COLOR } else { MODE_INACTIVE_COLOR }
-            };
             gen_content.push(
                 Text::new(i18n.get_msg("main-singleplayer-pvp_mode"))
                     .size(SLIDER_TEXT_SIZE)
