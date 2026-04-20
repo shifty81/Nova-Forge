@@ -638,6 +638,11 @@ impl Screen {
             }
 
             // PvP / PvE mode toggle
+            const MODE_ACTIVE_COLOR: (u8, u8, u8) = (97, 255, 18);
+            const MODE_INACTIVE_COLOR: (u8, u8, u8) = (97, 97, 25);
+            let mode_btn_color = |active: bool| -> (u8, u8, u8) {
+                if active { MODE_ACTIVE_COLOR } else { MODE_INACTIVE_COLOR }
+            };
             gen_content.push(
                 Text::new(i18n.get_msg("main-singleplayer-pvp_mode"))
                     .size(SLIDER_TEXT_SIZE)
@@ -647,11 +652,7 @@ impl Screen {
             gen_content.push(
                 Row::with_children(vec![
                     {
-                        let color = if world.pvp {
-                            (97, 255, 18)
-                        } else {
-                            (97, 97, 25)
-                        };
+                        let (r, g, b) = mode_btn_color(world.pvp);
                         Button::new(
                             &mut self.pvp_button,
                             Row::with_children(vec![
@@ -668,7 +669,7 @@ impl Screen {
                             style::button::Style::new(imgs.selection)
                                 .hover_image(imgs.selection_hover)
                                 .press_image(imgs.selection_press)
-                                .image_color(Rgba::new(color.0, color.1, color.2, 192)),
+                                .image_color(Rgba::new(r, g, b, 192)),
                         )
                         .width(Length::FillPortion(1))
                         .min_height(18)
@@ -678,11 +679,7 @@ impl Screen {
                         .into()
                     },
                     {
-                        let color = if !world.pvp {
-                            (97, 255, 18)
-                        } else {
-                            (97, 97, 25)
-                        };
+                        let (r, g, b) = mode_btn_color(!world.pvp);
                         Button::new(
                             &mut self.pve_button,
                             Row::with_children(vec![
@@ -699,7 +696,7 @@ impl Screen {
                             style::button::Style::new(imgs.selection)
                                 .hover_image(imgs.selection_hover)
                                 .press_image(imgs.selection_press)
-                                .image_color(Rgba::new(color.0, color.1, color.2, 192)),
+                                .image_color(Rgba::new(r, g, b, 192)),
                         )
                         .width(Length::FillPortion(1))
                         .min_height(18)
