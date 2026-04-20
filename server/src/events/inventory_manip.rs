@@ -708,6 +708,9 @@ impl ServerEvent for InventoryManipEvent {
                                                 .get(target_pos)
                                                 .ok()
                                                 .copied();
+                                            // Note: `is_fluid()` in this engine means "not filled" –
+                                            // it includes both air and liquid blocks (not just
+                                            // water). Air IS a fluid here.
                                             let can_place = below
                                                 .is_some_and(|b| b.is_filled())
                                                 && at.is_some_and(|b| {
@@ -733,29 +736,6 @@ impl ServerEvent for InventoryManipEvent {
                                         if !placed {
                                             let _ =
                                                 inventory.insert_or_stack_at(slot, item);
-                                        }
-                                        Some(InventoryUpdateEvent::Used)
-                                    },
-                                    ItemKind::Utility {
-                                        kind: item::Utility::Campfire,
-                                        ..
-                                    } => {
-                                        if let Some(pos) = data.positions.get(entity) {
-                                            emitters.emit(CreateObjectEvent {
-                                                pos: comp::Pos(pos.0),
-                                                vel: comp::Vel::default(),
-                                                body: comp::object::Body::CampfireLit,
-                                                object: None,
-                                                item: None,
-                                                light_emitter: Some(LightEmitter {
-                                                    col: Rgb::new(1.0, 0.3, 0.1),
-                                                    strength: 5.0,
-                                                    flicker: 1.0,
-                                                    animated: true,
-                                                    dir: None,
-                                                }),
-                                                stats: None,
-                                            });
                                         }
                                         Some(InventoryUpdateEvent::Used)
                                     },

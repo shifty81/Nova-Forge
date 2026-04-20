@@ -52,8 +52,6 @@ pub enum Utility {
     AbilityReq,
     /// An item that, when used, places a crafting station sprite in the world.
     CraftingStation(SpriteKind),
-    /// An item that, when used, spawns a campfire entity.
-    Campfire,
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]

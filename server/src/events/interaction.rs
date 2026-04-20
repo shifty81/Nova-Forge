@@ -322,12 +322,19 @@ impl ServerEvent for MineBlockEvent {
 
                     let sprite = block.get_sprite();
 
-                    // Maximum damage has reached, destroy the block
-                    let is_broken = damage
-                        .and_then(|damage| Some((sprite?.required_mine_damage(), damage)))
-                        .is_some_and(|(required_damage, damage)| {
-                            required_damage.is_none_or(|required| damage >= required)
-                        });
+                    // Maximum damage has reached, destroy the block.
+                    // Sprites without a Damage attribute (e.g. Furniture) have
+                    // no incremental damage tracking; they break in a single hit.
+                    let is_broken = if damage.is_none() {
+                        // No Damage attribute → single-hit mine
+                        sprite.is_some()
+                    } else {
+                        damage
+                            .and_then(|damage| Some((sprite?.required_mine_damage(), damage)))
+                            .is_some_and(|(required_damage, damage)| {
+                                required_damage.is_none_or(|required| damage >= required)
+                            })
+                    };
 
                     // Stage changes happen in damage interval of `mine_drop_intevral`
                     let stage_changed = damage
