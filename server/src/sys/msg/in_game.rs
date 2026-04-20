@@ -383,6 +383,7 @@ impl Sys {
                                         .chars()
                                         .take(64)
                                         .collect(),
+                                    trusted_aliases: Vec::new(),
                                 };
                                 let _ = guard.player_plots.insert(entity, plot.clone());
                                 drop(guard);
