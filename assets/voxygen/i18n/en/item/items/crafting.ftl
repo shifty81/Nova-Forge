@@ -229,6 +229,39 @@ object-mortar_pestle = Mortar and Pestle
 object-sewing_set = Sewing Set
     .desc = Used to craft various items.
 
+object-crafting_bench = Crafting Bench
+    .desc = A sturdy workbench for crafting various items. Place it in the world to use it.
+
+object-crafting_forge = Forge
+    .desc = A metal forge for smelting and shaping metals. Place it in the world to use it.
+
+object-crafting_cauldron = Cauldron
+    .desc = A large cauldron for brewing potions and concoctions. Place it in the world to use it.
+
+object-crafting_anvil = Anvil
+    .desc = A heavy iron anvil for shaping metal weapons and components. Place it in the world to use it.
+
+object-cooking_pot = Cooking Pot
+    .desc = A pot for cooking food and preparing meals. Place it in the world to use it.
+
+object-spinning_wheel = Spinning Wheel
+    .desc = A wheel for spinning fiber into thread and cloth. Place it in the world to use it.
+
+object-tanning_rack = Tanning Rack
+    .desc = A rack for tanning hides into usable leather. Place it in the world to use it.
+
+object-crafting_loom = Loom
+    .desc = A loom for weaving cloth into fabric and garments. Place it in the world to use it.
+
+object-dismantling_bench = Dismantling Bench
+    .desc = A bench for breaking down items into their components. Place it in the world to use it.
+
+object-repair_bench = Repair Bench
+    .desc = A bench for repairing damaged equipment. Place it in the world to use it.
+
+object-campfire_kit = Campfire Kit
+    .desc = A bundle of wood and stones ready to form a campfire. Use it to place a campfire.
+
 object-potion_empty = Empty Vial
     .desc = A simple glass vial used for holding various fluids.
 

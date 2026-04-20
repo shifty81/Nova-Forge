@@ -2776,6 +2776,39 @@
             "common.items.crafting_tools.sewing_set",
         ): "object-sewing_set",
         Simple(
+            "common.items.crafting_tools.crafting_bench",
+        ): "object-crafting_bench",
+        Simple(
+            "common.items.crafting_tools.forge",
+        ): "object-crafting_forge",
+        Simple(
+            "common.items.crafting_tools.cauldron",
+        ): "object-crafting_cauldron",
+        Simple(
+            "common.items.crafting_tools.anvil",
+        ): "object-crafting_anvil",
+        Simple(
+            "common.items.crafting_tools.cooking_pot",
+        ): "object-cooking_pot",
+        Simple(
+            "common.items.crafting_tools.spinning_wheel",
+        ): "object-spinning_wheel",
+        Simple(
+            "common.items.crafting_tools.tanning_rack",
+        ): "object-tanning_rack",
+        Simple(
+            "common.items.crafting_tools.loom",
+        ): "object-crafting_loom",
+        Simple(
+            "common.items.crafting_tools.dismantling_bench",
+        ): "object-dismantling_bench",
+        Simple(
+            "common.items.crafting_tools.repair_bench",
+        ): "object-repair_bench",
+        Simple(
+            "common.items.crafting_tools.campfire",
+        ): "object-campfire_kit",
+        Simple(
             "common.items.npc_weapons.biped_small.mandragora",
         ): "common-items-npc_weapons-biped_small-mandragora",
         Simple(
