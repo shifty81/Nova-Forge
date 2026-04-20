@@ -1069,6 +1069,30 @@ impl SpriteKind {
             SpriteKind::Ironwood => item("common.items.log.ironwood"),
             SpriteKind::Frostwood => item("common.items.log.frostwood"),
             SpriteKind::Eldwood => item("common.items.log.eldwood"),
+            // Crafting stations — dropped back as their item when mined
+            SpriteKind::CraftingBench => {
+                item("common.items.crafting_tools.crafting_bench")
+            },
+            SpriteKind::Forge => item("common.items.crafting_tools.forge"),
+            SpriteKind::Cauldron => item("common.items.crafting_tools.cauldron"),
+            SpriteKind::Anvil => item("common.items.crafting_tools.anvil"),
+            SpriteKind::CookingPot => item("common.items.crafting_tools.cooking_pot"),
+            SpriteKind::SpinningWheel => {
+                item("common.items.crafting_tools.spinning_wheel")
+            },
+            SpriteKind::TanningRack => {
+                item("common.items.crafting_tools.tanning_rack")
+            },
+            SpriteKind::Loom => item("common.items.crafting_tools.loom"),
+            SpriteKind::DismantlingBench => {
+                item("common.items.crafting_tools.dismantling_bench")
+            },
+            SpriteKind::RepairBench => {
+                item("common.items.crafting_tools.repair_bench")
+            },
+            SpriteKind::BonfireMUnlit | SpriteKind::BonfireMLit => {
+                item("common.items.crafting_tools.campfire")
+            },
             // TODO: why does this have a loot table?
             SpriteKind::MagicalBarrier => table("common.loot_tables.sprite.chest"),
             SpriteKind::WitchChest => table("common.loot_tables.spot.witch"),
@@ -1241,6 +1265,19 @@ impl SpriteKind {
             | SpriteKind::Silver
             | SpriteKind::Gold
             | SpriteKind::Lodestone => Some(ToolKind::Pick),
+            // Crafting stations — mined with a pickaxe to recover the item
+            SpriteKind::CraftingBench
+            | SpriteKind::Forge
+            | SpriteKind::Cauldron
+            | SpriteKind::Anvil
+            | SpriteKind::CookingPot
+            | SpriteKind::SpinningWheel
+            | SpriteKind::TanningRack
+            | SpriteKind::Loom
+            | SpriteKind::DismantlingBench
+            | SpriteKind::RepairBench
+            | SpriteKind::BonfireMUnlit
+            | SpriteKind::BonfireMLit => Some(ToolKind::Pick),
             SpriteKind::Grave | SpriteKind::Mud => Some(ToolKind::Shovel),
             _ => None,
         }

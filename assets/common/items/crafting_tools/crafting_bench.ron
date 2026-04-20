@@ -1,0 +1,9 @@
+ItemDef(
+    legacy_name: "Crafting Bench",
+    legacy_description: "A sturdy workbench for crafting various items. Use it to place the bench in the world.",
+    kind: Utility(
+        kind: CraftingStation(CraftingBench),
+    ),
+    quality: Moderate,
+    tags: [Utility],
+)

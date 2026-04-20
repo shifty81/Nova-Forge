@@ -682,6 +682,63 @@ impl ServerEvent for InventoryManipEvent {
                                             },
                                         }
                                     },
+                                    ItemKind::Utility {
+                                        kind: item::Utility::CraftingStation(sprite_kind),
+                                        ..
+                                    } => {
+                                        let sprite_kind = *sprite_kind;
+                                        let placed = if let Some(pos) =
+                                            data.positions.get(entity)
+                                        {
+                                            // Try to place the sprite at the player's feet.
+                                            let block_pos = pos.0.map(|e| e.floor() as i32);
+                                            let target_pos = block_pos;
+                                            let below_pos = Vec3::new(
+                                                target_pos.x,
+                                                target_pos.y,
+                                                target_pos.z - 1,
+                                            );
+                                            let below = data
+                                                .terrain
+                                                .get(below_pos)
+                                                .ok()
+                                                .copied();
+                                            let at = data
+                                                .terrain
+                                                .get(target_pos)
+                                                .ok()
+                                                .copied();
+                                            // Note: `is_fluid()` returns true for non-solid blocks
+                                            // (air and liquids), the inverse of `is_filled()`.
+                                            // Air IS a fluid in this engine's terminology.
+                                            let can_place = below
+                                                .is_some_and(|b| b.is_filled())
+                                                && at.is_some_and(|b| {
+                                                    b.is_fluid()
+                                                        && b.get_sprite()
+                                                            .is_none_or(|s| s == SpriteKind::Empty)
+                                                })
+                                                && data
+                                                    .block_change
+                                                    .can_set_block(target_pos);
+                                            if can_place {
+                                                data.block_change.set(
+                                                    target_pos,
+                                                    Block::air(sprite_kind),
+                                                );
+                                                true
+                                            } else {
+                                                false
+                                            }
+                                        } else {
+                                            false
+                                        };
+                                        if !placed {
+                                            let _ =
+                                                inventory.insert_or_stack_at(slot, item);
+                                        }
+                                        Some(InventoryUpdateEvent::Used)
+                                    },
                                     _ => {
                                         inventory.insert_or_stack_at(slot, item).expect(
                                             "slot was just vacated of item, so it definitely fits \

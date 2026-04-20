@@ -31,6 +31,8 @@ widget_ids! {
         relative_to_win_text,
         absolute_scale_button,
         absolute_scale_text,
+        dpi_auto_button,
+        dpi_auto_text,
         general_txt,
         load_tips_button,
         load_tips_button_label,
@@ -518,6 +520,45 @@ impl Widget for Interface<'_> {
                 .set(state.ids.ui_scale_slider, ui);
         }
 
+        // DPI-Aware Auto Scaling Button
+        let (check_img, check_mo_img, check_press_img, dpi_auto_selected) = match ui_scale {
+            ScaleMode::DpiFactor => (
+                self.imgs.check_checked,
+                self.imgs.check_checked_mo,
+                self.imgs.check_checked,
+                true,
+            ),
+            ScaleMode::Absolute(_) | ScaleMode::RelativeToWindow(_) => (
+                self.imgs.check,
+                self.imgs.check_mo,
+                self.imgs.check_press,
+                false,
+            ),
+        };
+        if Button::image(check_img)
+            .w_h(12.0, 12.0)
+            .down_from(state.ids.absolute_scale_button, 8.0)
+            .hover_image(check_mo_img)
+            .press_image(check_press_img)
+            .set(state.ids.dpi_auto_button, ui)
+            .was_clicked()
+            && !dpi_auto_selected
+        {
+            events.push(UiScale(ScaleChange::ToDpiAuto));
+        }
+
+        Text::new(
+            &self
+                .localized_strings
+                .get_msg("hud-settings-dpi_auto_scaling"),
+        )
+        .right_from(state.ids.dpi_auto_button, 10.0)
+        .font_size(self.fonts.cyri.scale(14))
+        .font_id(self.fonts.cyri.conrod_id)
+        .graphics_for(state.ids.dpi_auto_button)
+        .color(TEXT_COLOR)
+        .set(state.ids.dpi_auto_text, ui);
+
         // Crosshair Options
         // Crosshair Types
         // Round
@@ -650,7 +691,7 @@ impl Widget for Interface<'_> {
             .set(state.ids.crosshair_inner_3, ui);
         // Crosshair Transparency Text and Slider
         Text::new(&self.localized_strings.get_msg("hud-settings-crosshair"))
-            .down_from(state.ids.absolute_scale_button, 20.0)
+            .down_from(state.ids.dpi_auto_button, 20.0)
             .font_size(self.fonts.cyri.scale(18))
             .font_id(self.fonts.cyri.conrod_id)
             .color(TEXT_COLOR)

@@ -704,6 +704,15 @@ impl Widget for Crafting<'_> {
             )
         };
         let mut ordered_recipes: Vec<_> = recipe_source
+            .filter(|((_, recipe), _)| {
+                // When at a specific station, only show recipes for that station.
+                // When not at a station, show all recipes.
+                if let Some((_, station)) = self.show.crafting_fields.craft_sprite {
+                    recipe.craft_sprite == Some(station)
+                } else {
+                    true
+                }
+            })
             .filter(|((_, recipe), _)| match search_filter {
                 SearchFilter::None => {
                     search(&recipe.output.0)
@@ -742,6 +751,14 @@ impl Widget for Crafting<'_> {
                     .iter()
                     // Filter by selected tab
                     .filter(|(_, (_, _, tab))| *sel_crafting_tab == CraftingTab::All || sel_crafting_tab == tab)
+                    // When at a station, only show pseudo recipes for that station
+                    .filter(|(_, (recipe, _, _))| {
+                        if let Some((_, station)) = self.show.crafting_fields.craft_sprite {
+                            recipe.craft_sprite == Some(station)
+                        } else {
+                            true
+                        }
+                    })
                     // Filter by search filter
                     .filter(|(_, (_, output_name, _))| {
                         match search_filter {

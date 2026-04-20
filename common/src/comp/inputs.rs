@@ -23,6 +23,9 @@ pub struct PlayerPlot {
     pub area: Aabb<i32>,
     /// Human-readable name for this plot (set by the player or auto-generated).
     pub name: String,
+    /// Player aliases that have been granted build access to this plot.
+    #[serde(default)]
+    pub trusted_aliases: Vec<String>,
 }
 
 impl Component for PlayerPlot {

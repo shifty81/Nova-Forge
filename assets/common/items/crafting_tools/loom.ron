@@ -1,0 +1,9 @@
+ItemDef(
+    legacy_name: "Loom",
+    legacy_description: "A loom for weaving cloth into fabric and garments. Use it to place the loom in the world.",
+    kind: Utility(
+        kind: CraftingStation(Loom),
+    ),
+    quality: Moderate,
+    tags: [Utility],
+)

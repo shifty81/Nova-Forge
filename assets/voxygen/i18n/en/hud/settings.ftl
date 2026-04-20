@@ -12,6 +12,7 @@ hud-settings-tips_on_startup = Tips-On-Startup
 hud-settings-ui_scale = UI-Scale
 hud-settings-relative_scaling = Relative Scaling
 hud-settings-custom_scaling = Custom Scaling
+hud-settings-dpi_auto_scaling = DPI-Aware Auto
 hud-settings-crosshair = Crosshair
 hud-settings-opacity = Opacity
 hud-settings-hotbar = Hotbar

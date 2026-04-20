@@ -40,7 +40,8 @@ jobs:
           sudo apt-get update -q
           sudo apt-get install -y --no-install-recommends \
             libasound2-dev libxkbcommon-dev libwayland-dev libxi-dev \
-            libvulkan-dev glslang-tools cmake pkg-config
+            libvulkan-dev glslang-tools cmake pkg-config \
+            binutils gcc mold
 
       # Check crates that don't need a GPU: the server-cli and the pure library
       # crates.  The full client (nova-forge-voxygen) requires a Vulkan ICD that
@@ -90,7 +91,8 @@ jobs:
           sudo apt-get update -q
           sudo apt-get install -y --no-install-recommends \
             libasound2-dev libxkbcommon-dev libwayland-dev libxi-dev \
-            libvulkan-dev glslang-tools cmake pkg-config
+            libvulkan-dev glslang-tools cmake pkg-config \
+            binutils gcc mold
 
       # Run unit tests for pure library crates.
       # nova-forge-world tests can be slow; run with --no-fail-fast to get all
@@ -132,7 +134,8 @@ jobs:
           sudo apt-get update -q
           sudo apt-get install -y --no-install-recommends \
             libasound2-dev libxkbcommon-dev libwayland-dev libxi-dev \
-            libvulkan-dev glslang-tools cmake pkg-config
+            libvulkan-dev glslang-tools cmake pkg-config \
+            binutils gcc mold
 
       - name: clippy (server)
         run: cargo clippy -p nova-forge-server-cli -- -D warnings

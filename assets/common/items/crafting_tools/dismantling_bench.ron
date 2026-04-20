@@ -1,0 +1,9 @@
+ItemDef(
+    legacy_name: "Dismantling Bench",
+    legacy_description: "A bench for breaking down items into their components. Use it to place the dismantling bench in the world.",
+    kind: Utility(
+        kind: CraftingStation(DismantlingBench),
+    ),
+    quality: Moderate,
+    tags: [Utility],
+)

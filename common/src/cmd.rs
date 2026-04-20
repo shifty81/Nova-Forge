@@ -427,6 +427,8 @@ pub enum ServerChatCommand {
     PlotClear,
     PlotInfo,
     PlotRelease,
+    PlotTrust,
+    PlotUntrust,
     Poise,
     Portal,
     Region,
@@ -869,6 +871,16 @@ impl ServerChatCommand {
             ServerChatCommand::PlotRelease => {
                 cmd(vec![], Content::localized("command-plot_release-desc"), None)
             },
+            ServerChatCommand::PlotTrust => cmd(
+                vec![PlayerName(Required)],
+                Content::localized("command-plot_trust-desc"),
+                None,
+            ),
+            ServerChatCommand::PlotUntrust => cmd(
+                vec![PlayerName(Required)],
+                Content::localized("command-plot_untrust-desc"),
+                None,
+            ),
             ServerChatCommand::Poise => cmd(
                 vec![Integer("poise", 100, Required)],
                 Content::localized("command-poise-desc"),
@@ -1242,6 +1254,8 @@ impl ServerChatCommand {
             ServerChatCommand::PlotClear => "plot_clear",
             ServerChatCommand::PlotInfo => "plot_info",
             ServerChatCommand::PlotRelease => "plot_release",
+            ServerChatCommand::PlotTrust => "plot_trust",
+            ServerChatCommand::PlotUntrust => "plot_untrust",
             ServerChatCommand::Poise => "poise",
             ServerChatCommand::Portal => "portal",
             ServerChatCommand::ResetRecipes => "reset_recipes",

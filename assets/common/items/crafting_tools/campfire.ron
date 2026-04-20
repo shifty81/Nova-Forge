@@ -1,0 +1,9 @@
+ItemDef(
+    legacy_name: "Campfire",
+    legacy_description: "A campfire kit made from wood and stones. Use it to place a lit campfire.",
+    kind: Utility(
+        kind: CraftingStation(BonfireMLit),
+    ),
+    quality: Common,
+    tags: [Utility],
+)

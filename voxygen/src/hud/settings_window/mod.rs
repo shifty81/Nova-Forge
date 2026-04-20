@@ -143,6 +143,7 @@ pub enum Event {
 pub enum ScaleChange {
     ToAbsolute,
     ToRelative,
+    ToDpiAuto,
     Adjust(f64),
 }
 

@@ -116,10 +116,22 @@ pub struct GameplaySettings {
     /// increase this.
     #[serde(default = "default_max_plots_per_player")]
     pub max_plots_per_player: u8,
+    /// Multiplier applied to the maximum health of non-player NPCs (enemies,
+    /// wild creatures, etc.) at spawn time. A value of 1.0 is normal;
+    /// 0.6 is easy; 1.5 is hard. Values ≤ 0 are clamped to 0.1.
+    #[serde(default = "default_npc_health_mult")]
+    pub npc_health_mult: f32,
+    /// Multiplier applied to the outgoing attack-damage of non-player NPCs.
+    /// A value of 1.0 is normal; 0.7 is easy; 1.4 is hard.
+    /// Values ≤ 0 are clamped to 0.1.
+    #[serde(default = "default_npc_damage_mult")]
+    pub npc_damage_mult: f32,
 }
 
 fn default_max_plot_side() -> i32 { common::consts::MAX_PLAYER_PLOT_SIDE }
 fn default_max_plots_per_player() -> u8 { 1 }
+fn default_npc_health_mult() -> f32 { 1.0 }
+fn default_npc_damage_mult() -> f32 { 1.0 }
 
 impl GameplaySettings {
     /// Returns the effective maximum blocks-per-axis for a player plot,
@@ -131,6 +143,12 @@ impl GameplaySettings {
             common::consts::MAX_PLAYER_PLOT_SIDE
         }
     }
+
+    /// Returns the effective NPC health multiplier, clamped to a safe minimum.
+    pub fn effective_npc_health_mult(&self) -> f32 { self.npc_health_mult.max(0.1) }
+
+    /// Returns the effective NPC damage multiplier, clamped to a safe minimum.
+    pub fn effective_npc_damage_mult(&self) -> f32 { self.npc_damage_mult.max(0.1) }
 }
 
 impl Default for GameplaySettings {
@@ -140,6 +158,8 @@ impl Default for GameplaySettings {
             explosion_burn_marks: true,
             max_plot_side: default_max_plot_side(),
             max_plots_per_player: default_max_plots_per_player(),
+            npc_health_mult: default_npc_health_mult(),
+            npc_damage_mult: default_npc_damage_mult(),
         }
     }
 }
