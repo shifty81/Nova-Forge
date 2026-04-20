@@ -111,7 +111,15 @@ widget_ids! {
         map_mode_overlay,
         minimap_mode_btn,
         minimap_mode_overlay,
-
+        // ── Plot info panel ──
+        plot_info_align,
+        plot_info_title,
+        plot_info_name,
+        plot_info_pos,
+        plot_info_size,
+        plot_info_trusted_label,
+        plot_info_trusted,
+        plot_info_no_plot,
     }
 }
 
@@ -138,6 +146,8 @@ pub struct Map<'a> {
     location_markers: &'a MapMarkers,
     map_drag: Vec2<f64>,
     extra_markers: &'a [ExtraMarker],
+    /// The player's currently claimed plot, if any.
+    current_plot: Option<&'a comp::PlayerPlot>,
 }
 impl<'a> Map<'a> {
     pub fn new(
@@ -153,6 +163,7 @@ impl<'a> Map<'a> {
         location_markers: &'a MapMarkers,
         map_drag: Vec2<f64>,
         extra_markers: &'a [ExtraMarker],
+        current_plot: Option<&'a comp::PlayerPlot>,
     ) -> Self {
         Self {
             imgs,
@@ -168,6 +179,7 @@ impl<'a> Map<'a> {
             location_markers,
             map_drag,
             extra_markers,
+            current_plot,
         }
     }
 }
@@ -1737,6 +1749,93 @@ impl Widget for Map<'_> {
             .graphics_for(state.ids.minimap_mode_btn)
             .middle_of(state.ids.minimap_mode_btn)
             .set(state.ids.minimap_mode_overlay, ui);
+
+        // ── Your Plot panel ─────────────────────────────────────────────────
+        // Shown at the bottom of the left (quest-log) panel.
+        // The panel is placed below the quest-log title so it doesn't overlap
+        // any future quest list entries.
+        const PLOT_PANEL_TOP: f64 = 380.0; // y-offset from qlog_align top
+        Rectangle::fill_with([228.0, 220.0], Color::Rgba(0.0, 0.0, 0.0, 0.4))
+            .top_left_with_margins_on(state.ids.qlog_align, PLOT_PANEL_TOP, 2.0)
+            .set(state.ids.plot_info_align, ui);
+
+        Text::new(&i18n.get_msg("hud-map-plot_title"))
+            .mid_top_with_margin_on(state.ids.plot_info_align, 6.0)
+            .font_id(self.fonts.cyri.conrod_id)
+            .font_size(self.fonts.cyri.scale(17))
+            .color(Color::Rgba(1.0, 0.85, 0.2, 1.0))
+            .set(state.ids.plot_info_title, ui);
+
+        if let Some(plot) = self.current_plot {
+            let center = (plot.area.min + plot.area.max) / 2;
+            let dims = plot.area.max - plot.area.min;
+            let name_str = if plot.name.is_empty() {
+                i18n.get_msg("hud-map-plot_unnamed").to_string()
+            } else {
+                plot.name.clone()
+            };
+            Text::new(&name_str)
+                .down_from(state.ids.plot_info_title, 8.0)
+                .font_id(self.fonts.cyri.conrod_id)
+                .font_size(self.fonts.cyri.scale(14))
+                .color(TEXT_COLOR)
+                .set(state.ids.plot_info_name, ui);
+
+            let pos_str = format!(
+                "{}: {}, {}, {}",
+                i18n.get_msg("hud-map-plot_center"),
+                center.x,
+                center.y,
+                center.z,
+            );
+            Text::new(&pos_str)
+                .down_from(state.ids.plot_info_name, 5.0)
+                .font_id(self.fonts.cyri.conrod_id)
+                .font_size(self.fonts.cyri.scale(13))
+                .color(TEXT_GRAY_COLOR)
+                .set(state.ids.plot_info_pos, ui);
+
+            let size_str = format!(
+                "{}: {}×{}×{}",
+                i18n.get_msg("hud-map-plot_size"),
+                dims.x,
+                dims.y,
+                dims.z,
+            );
+            Text::new(&size_str)
+                .down_from(state.ids.plot_info_pos, 4.0)
+                .font_id(self.fonts.cyri.conrod_id)
+                .font_size(self.fonts.cyri.scale(13))
+                .color(TEXT_GRAY_COLOR)
+                .set(state.ids.plot_info_size, ui);
+
+            Text::new(&i18n.get_msg("hud-map-plot_trusted_label"))
+                .down_from(state.ids.plot_info_size, 8.0)
+                .font_id(self.fonts.cyri.conrod_id)
+                .font_size(self.fonts.cyri.scale(13))
+                .color(TEXT_COLOR)
+                .set(state.ids.plot_info_trusted_label, ui);
+
+            let trusted_str = if plot.trusted_aliases.is_empty() {
+                i18n.get_msg("hud-map-plot_trusted_none").to_string()
+            } else {
+                plot.trusted_aliases.join(", ")
+            };
+            Text::new(&trusted_str)
+                .down_from(state.ids.plot_info_trusted_label, 4.0)
+                .w(220.0)
+                .font_id(self.fonts.cyri.conrod_id)
+                .font_size(self.fonts.cyri.scale(12))
+                .color(TEXT_GRAY_COLOR)
+                .set(state.ids.plot_info_trusted, ui);
+        } else {
+            Text::new(&i18n.get_msg("hud-map-plot_no_plot"))
+                .down_from(state.ids.plot_info_title, 10.0)
+                .font_id(self.fonts.cyri.conrod_id)
+                .font_size(self.fonts.cyri.scale(13))
+                .color(TEXT_GRAY_COLOR)
+                .set(state.ids.plot_info_no_plot, ui);
+        }
 
         events
     }

@@ -54,3 +54,12 @@ hud-map-myrmidon = Myrmidon Dungeon
 hud-map-terracotta = Terracotta Ruins
 hud-map-vampire_castle = Vampire Castle
 hud-map-placed_by = Placed by { $name }
+
+## Plot info panel (shown in the left panel of the map window)
+hud-map-plot_title = Your Plot
+hud-map-plot_no_plot = No plot claimed.
+hud-map-plot_unnamed = (unnamed)
+hud-map-plot_center = Center
+hud-map-plot_size = Size
+hud-map-plot_trusted_label = Trusted players:
+hud-map-plot_trusted_none = (none)

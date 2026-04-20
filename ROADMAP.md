@@ -48,33 +48,32 @@ The current absolute-scale slider was capped at 2.0×, making icons and text ver
 
 ## Phase 2 — Player Housing System
 
-**Status: Design Phase — gaps identified below**
+**Status: Substantially Complete — remaining items below**
 
-Player housing is a major new system. The following design gaps must be resolved before implementation begins.
+Player housing is a major new system. The following design decisions have been resolved during implementation:
 
-### Design Gaps
+1. **Plot ownership model** — Proximity claim via `/plot_claim` (or build-mode toggle key B). Max plot side and max plots per player are configurable in server `settings.ron`.
+2. **Plot boundaries** — Fixed-size AABB rectangular region. Boundaries visualised in-world via a gold WireBox overlay (DebugShape::WireBox).
+3. **Persistence backend** — `PlayerPlot` ECS component on the server + `PlayerBuildArea` area container. Plot data persisted via `state_ext` on character save/login.
+4. **Build permissions system** — Owner + trusted-player list. Trust managed via `/plot_trust` and `/plot_untrust`.
+5. **Furniture / decoration system** — Pending (see tasks below).
+6. **Economy integration** — Housing is free; no currency system.
+7. **Server configuration** — `GameplaySettings` in `settings.ron` has `max_plot_side` and `max_plots_per_player`.
+8. **World zones** — Players can build anywhere they claim.
+9. **Migration / import** — Pending.
+10. **Multiplayer sync** — Block-place events validated server-side via `CanBuild` + `PlayerBuildArea`.
 
-1. **Plot ownership model** — How are plots claimed? (proximity claim, purchase with in-game currency, server-admin grant?) Need to define the claim radius, max plots per player, and what happens when a player leaves the server permanently.
-2. **Plot boundaries** — Fixed-size rectangular chunks vs. flexible polygon plots? How are boundaries visualised in-world (fences, markers, highlighted voxels)?
-3. **Persistence backend** — Houses are voxel structures. Where are they stored? (server-side SQLite extension, separate file per plot, embedded in world chunks?) Need a schema for plot metadata (owner UUID, position, size, permissions).
-4. **Build permissions system** — Who can place/break blocks inside a plot? (owner only, trusted list, guild members, visitors?) Need a permission enum and a UI for managing the list.
-5. **Furniture / decoration system** — Are furnishings separate entity-objects or placed voxels? If entities, new ECS components (`Furniture`, `PlotObject`) are needed. If voxels, a mechanism to distinguish "owned structure" voxels from world terrain is required.
-6. **Economy integration** — Is there an in-game currency for purchasing plots or furnishings? Nova-Forge currently has no economy layer — decision needed: implement a basic coin system or keep housing free.
-7. **Server configuration** — Server admins need `settings.ron` options: enable/disable housing, max plot size, max plots per player, housing zone bounds.
-8. **World zones** — Where can players build? (anywhere, designated town districts, purchasable wilderness plots?) Define zone types and how they are marked on the map.
-9. **Migration / import** — Should players be able to import voxel blueprints (`.vox` files) as house templates?
-10. **Multiplayer sync** — Real-time block-place events must be validated server-side and broadcast to nearby clients. Define the network message types needed.
-
-### Implementation tasks (once gaps are resolved)
+### Implementation tasks
 
 - [x] `PlotClaim` server-side component and storage
 - [x] `/plot_claim`, `/plot_release`, `/plot_info`, `/plot_clear` (admin) chat commands
-- [x] `/plot_trust <player>` and `/plot_untrust <player>` — grant/revoke per-player build access *(COMPLETE)*
+- [x] `/plot_trust <player>` and `/plot_untrust <player>` — grant/revoke per-player build access
 - [x] Plot boundary visualisation (WireBox overlay via DebugShape)
-- [x] Build-mode UI (toggle, block palette, undo/redo)
+- [x] Build-mode UI (toggle, block palette scroll-wheel selection)
+- [x] Housing tab in the map window showing owned plot (name, center, size, trusted players)
+- [ ] Build-mode undo/redo stack
 - [ ] Furniture entity type + placement UI
-- [ ] Housing tab in the map window showing owned plots
-- [ ] Server admin panel entries for housing config
+- [ ] Server admin panel UI entries for housing config (in-game settings window)
 
 ---
 

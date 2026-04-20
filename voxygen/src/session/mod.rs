@@ -150,6 +150,9 @@ pub struct SessionState {
     /// Index into `BLOCK_PALETTE` — the block preset currently selected for
     /// placement in build mode.
     palette_index: usize,
+    /// The player's currently claimed plot, if any.  Updated on every
+    /// `PlotClaimResult` event and passed to the HUD so the map can display it.
+    current_plot: Option<common::comp::PlayerPlot>,
 }
 
 /// Represents an active game session (i.e., the one being played).
@@ -229,6 +232,7 @@ impl SessionState {
             build_mode_active: false,
             plot_boundary_shape: None,
             palette_index: 0,
+            current_plot: None,
         }
     }
 
@@ -589,6 +593,9 @@ impl SessionState {
                                     .map(|(label, _, _, _, _)| *label)
                                     .collect(),
                             );
+                            // Store the plot so the map window can display it.
+                            self.current_plot = Some(plot);
+                            self.hud.set_current_plot(self.current_plot.clone());
                         },
                         Ok(None) => {
                             // Plot successfully released.
@@ -601,6 +608,8 @@ impl SessionState {
                             if let Some(id) = self.plot_boundary_shape.take() {
                                 self.scene.debug.remove_shape(id);
                             }
+                            self.current_plot = None;
+                            self.hud.set_current_plot(None);
                         },
                         Err(err) => {
                             // The server rejected the request; revert the optimistic toggle.

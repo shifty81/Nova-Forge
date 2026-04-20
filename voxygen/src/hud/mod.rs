@@ -1337,6 +1337,9 @@ pub struct Hud {
     /// Phase 4 — palette state: `Some((selected_index, label_list))` while
     /// build mode is active and the player has scrolled the palette.
     build_mode_palette: Option<(usize, Vec<&'static str>)>,
+    /// The player's currently claimed plot.  `None` when no plot is claimed.
+    /// Updated by `set_current_plot()` and forwarded to the map window.
+    current_plot: Option<comp::PlayerPlot>,
 }
 
 impl Hud {
@@ -1481,6 +1484,7 @@ impl Hud {
             current_dialogue: None,
             extra_markers: Vec::new(),
             build_mode_palette: None,
+            current_plot: None,
         }
     }
 
@@ -3995,6 +3999,7 @@ impl Hud {
                 &persisted_state.location_markers,
                 self.map_drag,
                 &self.extra_markers,
+                self.current_plot.as_ref(),
             )
             .set(self.ids.map, ui_widgets)
             {
@@ -5391,6 +5396,12 @@ impl Hud {
     /// Called every time the player scrolls to a new block preset.
     pub fn build_mode_palette(&mut self, index: usize, labels: Vec<&'static str>) {
         self.build_mode_palette = Some((index, labels));
+    }
+
+    /// Update the player's currently claimed plot.  Called whenever a
+    /// `PlotClaimResult` event is received by the session.
+    pub fn set_current_plot(&mut self, plot: Option<comp::PlayerPlot>) {
+        self.current_plot = plot;
     }
 
     pub fn camera_clamp(&mut self, camera_clamp: bool) { self.show.camera_clamp = camera_clamp; }
