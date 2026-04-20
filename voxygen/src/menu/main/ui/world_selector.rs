@@ -63,6 +63,8 @@ pub struct Screen {
     generate_map: button::State,
     experimental_stable_button: button::State,
     experimental_track_b_button: button::State,
+    pvp_button: button::State,
+    pve_button: button::State,
 
     pub confirmation: Option<Confirmation>,
 }
@@ -634,6 +636,81 @@ impl Screen {
                     );
                 }
             }
+
+            // PvP / PvE mode toggle
+            gen_content.push(
+                Text::new(i18n.get_msg("main-singleplayer-pvp_mode"))
+                    .size(SLIDER_TEXT_SIZE)
+                    .horizontal_alignment(iced::HorizontalAlignment::Center)
+                    .into(),
+            );
+            gen_content.push(
+                Row::with_children(vec![
+                    {
+                        let color = if world.pvp {
+                            (97, 255, 18)
+                        } else {
+                            (97, 97, 25)
+                        };
+                        Button::new(
+                            &mut self.pvp_button,
+                            Row::with_children(vec![
+                                Space::new(Length::FillPortion(5), Length::Units(0)).into(),
+                                Text::new(i18n.get_msg("main-singleplayer-pvp"))
+                                    .width(Length::FillPortion(95))
+                                    .size(fonts.cyri.scale(14))
+                                    .vertical_alignment(iced::VerticalAlignment::Center)
+                                    .into(),
+                            ])
+                            .align_items(Align::Center),
+                        )
+                        .style(
+                            style::button::Style::new(imgs.selection)
+                                .hover_image(imgs.selection_hover)
+                                .press_image(imgs.selection_press)
+                                .image_color(Rgba::new(color.0, color.1, color.2, 192)),
+                        )
+                        .width(Length::FillPortion(1))
+                        .min_height(18)
+                        .on_press(Message::WorldChanged(
+                            super::WorldsChange::CurrentWorldChange(WorldChange::Pvp(true)),
+                        ))
+                        .into()
+                    },
+                    {
+                        let color = if !world.pvp {
+                            (97, 255, 18)
+                        } else {
+                            (97, 97, 25)
+                        };
+                        Button::new(
+                            &mut self.pve_button,
+                            Row::with_children(vec![
+                                Space::new(Length::FillPortion(5), Length::Units(0)).into(),
+                                Text::new(i18n.get_msg("main-singleplayer-pve"))
+                                    .width(Length::FillPortion(95))
+                                    .size(fonts.cyri.scale(14))
+                                    .vertical_alignment(iced::VerticalAlignment::Center)
+                                    .into(),
+                            ])
+                            .align_items(Align::Center),
+                        )
+                        .style(
+                            style::button::Style::new(imgs.selection)
+                                .hover_image(imgs.selection_hover)
+                                .press_image(imgs.selection_press)
+                                .image_color(Rgba::new(color.0, color.1, color.2, 192)),
+                        )
+                        .width(Length::FillPortion(1))
+                        .min_height(18)
+                        .on_press(Message::WorldChanged(
+                            super::WorldsChange::CurrentWorldChange(WorldChange::Pvp(false)),
+                        ))
+                        .into()
+                    },
+                ])
+                .into(),
+            );
 
             // Max-players slider — only relevant when hosting a LAN co-op game.
             if lan_mode {

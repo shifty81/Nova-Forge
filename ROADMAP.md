@@ -12,7 +12,7 @@ Checked items are complete (or substantially complete); unchecked items are plan
 - [x] LAN discovery and auto-connect
 - [x] `nova-forge.sh` build/run/release helper script
 - [x] Nix flake for reproducible builds
-- [ ] Persistent singleplayer world save management UI *(in progress)*
+- [x] Persistent singleplayer world save management UI *(COMPLETE)*
 
 ---
 
@@ -28,19 +28,21 @@ The current absolute-scale slider was capped at 2.0×, making icons and text ver
 - [x] Update the dropdown preset list to include 2.5, 3.0, 3.5, 4.0
 - [x] Add a "DPI-aware auto" default that detects monitor DPI and sets a sensible scale *(COMPLETE)*
 
-### Singleplayer world management *(PLANNED)*
+### Singleplayer world management *(partially complete)*
 
-- List, create, rename, and delete singleplayer worlds from the main menu
-- Per-world settings (seed, day length, difficulty)
+- [x] List, create, rename, and delete singleplayer worlds from the main menu
+- [x] Per-world settings: seed, day length, PvP/PvE combat mode
+- [ ] Per-world difficulty scaling (enemy HP / damage multipliers) *(PLANNED)*
 
 ### LAN server UX improvements *(COMPLETE)*
 
 - [x] Show LAN server version and player count in the browser list
 - [x] Connection status feedback during discovery
 
-### Settings persistence *(PLANNED)*
+### Settings persistence *(COMPLETE)*
 
-- Ensure all Nova-Forge-specific settings (GUI scale, LAN preferences) are saved to the user profile
+- [x] All Nova-Forge-specific settings (GUI scale, networking preferences) saved to `settings.ron`
+- [x] Per-world gameplay settings (seed, day length, PvP mode, max players) persisted in each world's `meta.ron`
 
 ---
 

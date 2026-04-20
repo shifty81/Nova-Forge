@@ -6,8 +6,12 @@ use rand::seq::IteratorRandom;
 use server::{
     Error as ServerError, Event, Input, Server, ServerInitStage,
     persistence::{DatabaseSettings, SqlLogMode},
-    settings::server_description::ServerDescription,
+    settings::{
+        GameplaySettings, ServerBattleMode,
+        server_description::ServerDescription,
+    },
 };
+use common::resources::BattleMode;
 
 use std::{
     sync::{
@@ -123,6 +127,14 @@ impl SingleplayerState {
             settings.map_file = Some(file_opts);
             settings.world_seed = world.seed;
             settings.day_length = world.day_length;
+            settings.gameplay = GameplaySettings {
+                battle_mode: ServerBattleMode::Global(if world.pvp {
+                    BattleMode::PvP
+                } else {
+                    BattleMode::PvE
+                }),
+                ..settings.gameplay
+            };
 
             let (stop_server_s, stop_server_r) = unbounded();
 
@@ -222,6 +234,7 @@ impl SingleplayerState {
             let server_data_dir = world.path.clone();
             let world_name = world.name.clone();
             let world_max_players = world.max_players;
+            let world_pvp = world.pvp;
 
             let mut settings = server::Settings::lan_coop(&server_data_dir);
             let mut editable_settings =
@@ -257,6 +270,14 @@ impl SingleplayerState {
             settings.day_length = world.day_length;
             settings.server_name = world_name.clone();
             settings.max_players = world_max_players;
+            settings.gameplay = GameplaySettings {
+                battle_mode: ServerBattleMode::Global(if world_pvp {
+                    BattleMode::PvP
+                } else {
+                    BattleMode::PvE
+                }),
+                ..settings.gameplay
+            };
 
             let (stop_server_s, stop_server_r) = unbounded();
             let (server_stage_tx, server_stage_rx) = unbounded();
