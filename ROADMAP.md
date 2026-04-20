@@ -28,11 +28,11 @@ The current absolute-scale slider was capped at 2.0×, making icons and text ver
 - [x] Update the dropdown preset list to include 2.5, 3.0, 3.5, 4.0
 - [x] Add a "DPI-aware auto" default that detects monitor DPI and sets a sensible scale *(COMPLETE)*
 
-### Singleplayer world management *(partially complete)*
+### Singleplayer world management *(COMPLETE)*
 
 - [x] List, create, rename, and delete singleplayer worlds from the main menu
 - [x] Per-world settings: seed, day length, PvP/PvE combat mode
-- [ ] Per-world difficulty scaling (enemy HP / damage multipliers) *(PLANNED)*
+- [x] Per-world difficulty scaling (enemy HP / damage multipliers) *(Easy/Normal/Hard)*
 
 ### LAN server UX improvements *(COMPLETE)*
 

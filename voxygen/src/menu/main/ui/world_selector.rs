@@ -9,6 +9,7 @@ use vek::Rgba;
 
 use crate::{
     menu::main::ui::{FILL_FRAC_TWO, WorldsChange},
+    singleplayer::singleplayer_world::Difficulty,
     ui::{
         fonts::IcedFonts,
         ice::{
@@ -65,6 +66,9 @@ pub struct Screen {
     experimental_track_b_button: button::State,
     pvp_button: button::State,
     pve_button: button::State,
+    difficulty_easy_button: button::State,
+    difficulty_normal_button: button::State,
+    difficulty_hard_button: button::State,
 
     pub confirmation: Option<Confirmation>,
 }
@@ -706,6 +710,67 @@ impl Screen {
                         .into()
                     },
                 ])
+                .into(),
+            );
+
+            // Difficulty toggle (Easy / Normal / Hard)
+            gen_content.push(
+                Text::new(i18n.get_msg("main-singleplayer-difficulty"))
+                    .size(SLIDER_TEXT_SIZE)
+                    .horizontal_alignment(iced::HorizontalAlignment::Center)
+                    .into(),
+            );
+            gen_content.push(
+                Row::with_children(
+                    [
+                        (
+                            Difficulty::Easy,
+                            &mut self.difficulty_easy_button,
+                            "main-singleplayer-difficulty-easy",
+                        ),
+                        (
+                            Difficulty::Normal,
+                            &mut self.difficulty_normal_button,
+                            "main-singleplayer-difficulty-normal",
+                        ),
+                        (
+                            Difficulty::Hard,
+                            &mut self.difficulty_hard_button,
+                            "main-singleplayer-difficulty-hard",
+                        ),
+                    ]
+                    .into_iter()
+                    .map(|(lvl, state, key)| {
+                        let (r, g, b) = mode_btn_color(world.difficulty == lvl);
+                        Button::new(
+                            state,
+                            Row::with_children(vec![
+                                Space::new(Length::FillPortion(5), Length::Units(0)).into(),
+                                Text::new(i18n.get_msg(key))
+                                    .width(Length::FillPortion(95))
+                                    .size(fonts.cyri.scale(14))
+                                    .vertical_alignment(iced::VerticalAlignment::Center)
+                                    .into(),
+                            ])
+                            .align_items(Align::Center),
+                        )
+                        .style(
+                            style::button::Style::new(imgs.selection)
+                                .hover_image(imgs.selection_hover)
+                                .press_image(imgs.selection_press)
+                                .image_color(Rgba::new(r, g, b, 192)),
+                        )
+                        .width(Length::FillPortion(1))
+                        .min_height(18)
+                        .on_press(Message::WorldChanged(
+                            super::WorldsChange::CurrentWorldChange(
+                                WorldChange::DifficultyChange(lvl),
+                            ),
+                        ))
+                        .into()
+                    })
+                    .collect(),
+                )
                 .into(),
             );
 

@@ -28,6 +28,8 @@ use rand::{rng, seq::IndexedRandom};
 use std::time::Duration;
 use tracing::warn;
 #[cfg(feature = "singleplayer")]
+use crate::singleplayer::singleplayer_world::Difficulty;
+#[cfg(feature = "singleplayer")]
 use common_base::local_lan_ip;
 #[cfg(feature = "singleplayer")]
 use server::settings::LAN_COOP_PORT;
@@ -132,6 +134,7 @@ pub enum WorldChange {
     MaxPlayers(u16),
     Experimental(bool),
     Pvp(bool),
+    DifficultyChange(Difficulty),
 }
 
 #[cfg(feature = "singleplayer")]
@@ -152,6 +155,7 @@ impl WorldChange {
             WorldChange::MaxPlayers(n) => world.max_players = n,
             WorldChange::Experimental(v) => world.use_experimental = v,
             WorldChange::Pvp(v) => world.pvp = v,
+            WorldChange::DifficultyChange(d) => world.difficulty = d,
         }
     }
 }

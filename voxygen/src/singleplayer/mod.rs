@@ -27,7 +27,7 @@ use tracing::{error, info, trace, warn};
 use crate::lan_discovery;
 
 mod singleplayer_world;
-pub use singleplayer_world::{SingleplayerWorld, SingleplayerWorlds};
+pub use singleplayer_world::{Difficulty, SingleplayerWorld, SingleplayerWorlds};
 
 const TPS: u64 = 30;
 
@@ -133,6 +133,8 @@ impl SingleplayerState {
                 } else {
                     BattleMode::PvE
                 }),
+                npc_health_mult: world.difficulty.npc_health_mult(),
+                npc_damage_mult: world.difficulty.npc_damage_mult(),
                 ..settings.gameplay
             };
 
@@ -235,6 +237,7 @@ impl SingleplayerState {
             let world_name = world.name.clone();
             let world_max_players = world.max_players;
             let world_pvp = world.pvp;
+            let world_difficulty = world.difficulty;
 
             let mut settings = server::Settings::lan_coop(&server_data_dir);
             let mut editable_settings =
@@ -276,6 +279,8 @@ impl SingleplayerState {
                 } else {
                     BattleMode::PvE
                 }),
+                npc_health_mult: world_difficulty.npc_health_mult(),
+                npc_damage_mult: world_difficulty.npc_damage_mult(),
                 ..settings.gameplay
             };
 
