@@ -305,6 +305,13 @@ mod version {
 
     use super::*;
 
+    // Schema version history:
+    //   V1 – initial
+    //   V2 – added day_length
+    //   V3 – added max_players
+    //   V4 – added use_experimental (Track B world gen toggle)
+    //   V5 – added pvp (PvP/PvE combat mode toggle)
+    //   V6 – current; added difficulty (Easy/Normal/Hard NPC scaling)
     pub type Current = V6;
 
     type LoadWorldFn<R> =

@@ -3137,24 +3137,22 @@ fn handle_plot_trust(
     let trustee_alias = parse_cmd_args!(args, String).ok_or_else(|| action.help_content())?;
 
     // The target must own a plot.
-    let (area_name, area_id) = {
+    let area_id = {
         let plots = server.state.ecs().read_storage::<comp::PlayerPlot>();
         if plots.get(target).is_none() {
             return Err(Content::localized("command-plot_info-not_owned"));
         }
         drop(plots);
         let area_name = format!("player_plot_{}", target.id());
-        let area_id = server
+        server
             .state
             .ecs()
             .read_resource::<AreasContainer<PlayerBuildArea>>()
             .area_metas()
             .get(&area_name)
             .copied()
-            .ok_or_else(|| Content::localized("command-plot_info-not_owned"))?;
-        (area_name, area_id)
+            .ok_or_else(|| Content::localized("command-plot_info-not_owned"))?
     };
-    let _ = area_name; // used only to compute area_id
 
     // The trustee must be online and distinct from the owner.
     let (trustee_entity, _) = find_alias(server.state.ecs(), &trustee_alias, false)?;
