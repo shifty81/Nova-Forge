@@ -1,0 +1,9 @@
+ItemDef(
+    legacy_name: "Repair Bench",
+    legacy_description: "A bench for repairing damaged equipment. Use it to place the repair bench in the world.",
+    kind: Utility(
+        kind: CraftingStation(RepairBench),
+    ),
+    quality: Moderate,
+    tags: [Utility],
+)

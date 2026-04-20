@@ -2919,4 +2919,96 @@
         ],
         craft_sprite: Some(Anvil),
     ),
+    // Crafting station items — hand-craftable so players can set up their base
+    "crafting_bench": (
+        output: ("common.items.crafting_tools.crafting_bench", 1),
+        inputs: [
+            (Item("common.items.log.wood"), 8, false),
+            (Item("common.items.crafting_ing.stones"), 4, false),
+        ],
+        craft_sprite: None,
+    ),
+    "forge": (
+        output: ("common.items.crafting_tools.forge", 1),
+        inputs: [
+            (Item("common.items.mineral.ingot.iron"), 6, false),
+            (Item("common.items.crafting_ing.stones"), 10, false),
+            (Item("common.items.log.wood"), 4, false),
+        ],
+        craft_sprite: Some(CraftingBench),
+    ),
+    "cauldron": (
+        output: ("common.items.crafting_tools.cauldron", 1),
+        inputs: [
+            (Item("common.items.mineral.ingot.iron"), 8, false),
+            (Item("common.items.log.wood"), 2, false),
+        ],
+        craft_sprite: Some(CraftingBench),
+    ),
+    "anvil": (
+        output: ("common.items.crafting_tools.anvil", 1),
+        inputs: [
+            (Item("common.items.mineral.ingot.iron"), 10, false),
+            (Item("common.items.crafting_ing.stones"), 6, false),
+        ],
+        craft_sprite: Some(CraftingBench),
+    ),
+    "cooking_pot": (
+        output: ("common.items.crafting_tools.cooking_pot", 1),
+        inputs: [
+            (Item("common.items.mineral.ingot.iron"), 4, false),
+            (Item("common.items.crafting_ing.stones"), 6, false),
+            (Item("common.items.log.wood"), 2, false),
+        ],
+        craft_sprite: Some(CraftingBench),
+    ),
+    "spinning_wheel": (
+        output: ("common.items.crafting_tools.spinning_wheel", 1),
+        inputs: [
+            (Item("common.items.log.wood"), 10, false),
+            (Item("common.items.mineral.ingot.iron"), 2, false),
+        ],
+        craft_sprite: Some(CraftingBench),
+    ),
+    "tanning_rack": (
+        output: ("common.items.crafting_tools.tanning_rack", 1),
+        inputs: [
+            (Item("common.items.log.wood"), 8, false),
+            (Item("common.items.mineral.ingot.iron"), 2, false),
+        ],
+        craft_sprite: Some(CraftingBench),
+    ),
+    "loom": (
+        output: ("common.items.crafting_tools.loom", 1),
+        inputs: [
+            (Item("common.items.log.wood"), 10, false),
+            (Item("common.items.mineral.ingot.iron"), 2, false),
+        ],
+        craft_sprite: Some(CraftingBench),
+    ),
+    "dismantling_bench": (
+        output: ("common.items.crafting_tools.dismantling_bench", 1),
+        inputs: [
+            (Item("common.items.log.wood"), 8, false),
+            (Item("common.items.mineral.ingot.iron"), 4, false),
+            (Item("common.items.crafting_ing.stones"), 4, false),
+        ],
+        craft_sprite: Some(CraftingBench),
+    ),
+    "repair_bench": (
+        output: ("common.items.crafting_tools.repair_bench", 1),
+        inputs: [
+            (Item("common.items.log.wood"), 8, false),
+            (Item("common.items.mineral.ingot.iron"), 4, false),
+        ],
+        craft_sprite: Some(CraftingBench),
+    ),
+    "campfire": (
+        output: ("common.items.crafting_tools.campfire", 1),
+        inputs: [
+            (Item("common.items.log.wood"), 5, false),
+            (Item("common.items.crafting_ing.stones"), 3, false),
+        ],
+        craft_sprite: None,
+    ),
 }

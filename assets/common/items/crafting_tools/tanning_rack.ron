@@ -1,0 +1,9 @@
+ItemDef(
+    legacy_name: "Tanning Rack",
+    legacy_description: "A rack for tanning hides into usable leather. Use it to place the tanning rack in the world.",
+    kind: Utility(
+        kind: CraftingStation(TanningRack),
+    ),
+    quality: Moderate,
+    tags: [Utility],
+)

@@ -1,0 +1,9 @@
+ItemDef(
+    legacy_name: "Anvil",
+    legacy_description: "A heavy iron anvil for shaping metal weapons and components. Use it to place the anvil in the world.",
+    kind: Utility(
+        kind: CraftingStation(Anvil),
+    ),
+    quality: Moderate,
+    tags: [Utility],
+)

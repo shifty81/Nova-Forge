@@ -1,0 +1,9 @@
+ItemDef(
+    legacy_name: "Cauldron",
+    legacy_description: "A large cauldron for brewing potions and concoctions. Use it to place the cauldron in the world.",
+    kind: Utility(
+        kind: CraftingStation(Cauldron),
+    ),
+    quality: Moderate,
+    tags: [Utility],
+)

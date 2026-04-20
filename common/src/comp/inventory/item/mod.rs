@@ -14,7 +14,7 @@ use crate::{
     lottery::LootSpec,
     recipe::RecipeInput,
     resources::ProgramTime,
-    terrain::{Block, sprite::SpriteCfg},
+    terrain::{Block, SpriteKind, sprite::SpriteCfg},
 };
 use common_i18n::Content;
 use core::{
@@ -50,6 +50,10 @@ pub enum Utility {
     Collar,
     Key,
     AbilityReq,
+    /// An item that, when used, places a crafting station sprite in the world.
+    CraftingStation(SpriteKind),
+    /// An item that, when used, spawns a campfire entity.
+    Campfire,
 }
 
 #[derive(Copy, Clone, Debug, PartialEq, Serialize, Deserialize)]

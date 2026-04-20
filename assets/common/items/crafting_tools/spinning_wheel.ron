@@ -1,0 +1,9 @@
+ItemDef(
+    legacy_name: "Spinning Wheel",
+    legacy_description: "A wheel for spinning fiber into thread and cloth. Use it to place the spinning wheel in the world.",
+    kind: Utility(
+        kind: CraftingStation(SpinningWheel),
+    ),
+    quality: Moderate,
+    tags: [Utility],
+)
