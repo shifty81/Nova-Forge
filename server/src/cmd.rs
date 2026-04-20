@@ -2959,6 +2959,7 @@ fn handle_plot_claim(
     let plot = comp::PlayerPlot {
         area: area.made_valid(),
         name,
+        trusted_aliases: Vec::new(),
     };
     let _ = server
         .state
