@@ -736,7 +736,7 @@ impl StateExt for State {
             if let Some(ref plot) = player_plot {
                 // Re-register the player's plot area so the server enforces build
                 // permissions even before the player sends a new ClaimPlot message.
-                let area_name = format!("player_plot_{:?}", entity.id());
+                let area_name = format!("player_plot_{}", entity.id());
                 if let Ok(area_id) = self
                     .ecs()
                     .write_resource::<AreasContainer<PlayerBuildArea>>()
@@ -787,7 +787,7 @@ impl StateExt for State {
                             *owner != entity && plot.trusted_aliases.contains(&my_alias)
                         })
                         .filter_map(|(owner, _)| {
-                            let area_name = format!("player_plot_{:?}", owner.id());
+                            let area_name = format!("player_plot_{}", owner.id());
                             area_container.area_metas().get(&area_name).copied()
                         })
                         .collect()

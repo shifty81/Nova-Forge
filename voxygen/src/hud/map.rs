@@ -1751,12 +1751,15 @@ impl Widget for Map<'_> {
             .set(state.ids.minimap_mode_overlay, ui);
 
         // ── Your Plot panel ─────────────────────────────────────────────────
-        // Shown at the bottom of the left (quest-log) panel.
-        // The panel is placed below the quest-log title so it doesn't overlap
-        // any future quest list entries.
-        const PLOT_PANEL_TOP: f64 = 380.0; // y-offset from qlog_align top
-        Rectangle::fill_with([228.0, 220.0], Color::Rgba(0.0, 0.0, 0.0, 0.4))
-            .top_left_with_margins_on(state.ids.qlog_align, PLOT_PANEL_TOP, 2.0)
+        // Shown at the bottom of the left (quest-log) panel (height 814).
+        // QLOG_ALIGN_HEIGHT is the full panel height; PLOT_PANEL_HEIGHT is the
+        // panel size; offset places it near the bottom leaving a small margin.
+        const QLOG_ALIGN_HEIGHT: f64 = 814.0;
+        const PLOT_PANEL_HEIGHT: f64 = 220.0;
+        const PLOT_PANEL_MARGIN: f64 = 8.0;
+        let plot_panel_top = QLOG_ALIGN_HEIGHT - PLOT_PANEL_HEIGHT - PLOT_PANEL_MARGIN;
+        Rectangle::fill_with([228.0, PLOT_PANEL_HEIGHT], Color::Rgba(0.0, 0.0, 0.0, 0.4))
+            .top_left_with_margins_on(state.ids.qlog_align, plot_panel_top, 2.0)
             .set(state.ids.plot_info_align, ui);
 
         Text::new(&i18n.get_msg("hud-map-plot_title"))
