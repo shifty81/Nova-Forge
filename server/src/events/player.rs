@@ -164,13 +164,7 @@ pub fn handle_exit_ingame(server: &mut Server, entity: EcsEntity, skip_persisten
 
     // Clean up the player's build area from AreasContainer so orphaned entries
     // don't accumulate and don't block future registrations on the same index.
-    {
-        let area_name = format!("player_plot_{}", entity.id());
-        let _ = state
-            .ecs()
-            .write_resource::<AreasContainer<PlayerBuildArea>>()
-            .remove(&area_name);
-    }
+    remove_player_build_area(state, entity);
 
     // We don't want to use delete_entity_recorded since we are transfering the
     // Uid to a new entity (and e.g. don't want it to be unmapped).
@@ -185,6 +179,17 @@ pub fn handle_exit_ingame(server: &mut Server, entity: EcsEntity, skip_persisten
             "Failed to delete entity when removing character"
         );
     }
+}
+
+/// Remove the player's named build area from [`AreasContainer<PlayerBuildArea>`]
+/// so that orphaned entries don't accumulate between sessions and don't block
+/// re-registration when an entity index is recycled by specs.
+fn remove_player_build_area(state: &common_state::State, entity: EcsEntity) {
+    let area_name = format!("player_plot_{}", entity.id());
+    let _ = state
+        .ecs()
+        .write_resource::<AreasContainer<PlayerBuildArea>>()
+        .remove(&area_name);
 }
 
 fn get_reason_str(reason: &comp::DisconnectReason) -> &str {
@@ -310,13 +315,7 @@ pub fn handle_client_disconnect(
     }
 
     // Clean up the player's build area from AreasContainer on disconnect.
-    {
-        let area_name = format!("player_plot_{}", entity.id());
-        let _ = state
-            .ecs()
-            .write_resource::<AreasContainer<PlayerBuildArea>>()
-            .remove(&area_name);
-    }
+    remove_player_build_area(server.state_mut(), entity);
 
     // Delete client entity
     if let Err(e) = server.state.delete_entity_recorded(entity)
