@@ -74,6 +74,8 @@ pub struct CharacterPlot {
     pub min: Vec3<i32>,
     pub max: Vec3<i32>,
     pub name: String,
+    #[serde(default)]
+    pub trusted: Vec<String>,
 }
 
 pub fn skill_group_to_db_string(skill_group: comp::skillset::SkillGroupKind) -> String {

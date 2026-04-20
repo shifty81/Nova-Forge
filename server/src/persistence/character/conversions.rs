@@ -306,6 +306,7 @@ pub fn convert_plot_to_database_json(plot: &PlayerPlot) -> Option<String> {
         min: plot.area.min,
         max: plot.area.max,
         name: plot.name.clone(),
+        trusted: plot.trusted_aliases.clone(),
     };
     serde_json::to_string(&db_plot)
         .map_err(|err| {
@@ -323,6 +324,7 @@ pub fn convert_plot_from_database_json(json: &str) -> Option<PlayerPlot> {
                 max: db_plot.max,
             },
             name: db_plot.name,
+            trusted_aliases: db_plot.trusted,
         }),
         Err(err) => {
             warn!("Error deserializing player plot: {} err: {}", json, err);

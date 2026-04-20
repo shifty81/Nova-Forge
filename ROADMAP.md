@@ -67,13 +67,14 @@ Player housing is a major new system. The following design gaps must be resolved
 
 ### Implementation tasks (once gaps are resolved)
 
-- `PlotClaim` server-side component and storage
-- `/claim`, `/unclaim`, `/trust`, `/untrust` chat commands
-- Plot boundary visualisation (highlight shader pass or client-side voxel overlay)
-- Build-mode UI (toggle, block palette, undo/redo)
-- Furniture entity type + placement UI
-- Housing tab in the map window showing owned plots
-- Server admin panel entries for housing config
+- [x] `PlotClaim` server-side component and storage
+- [x] `/plot_claim`, `/plot_release`, `/plot_info`, `/plot_clear` (admin) chat commands
+- [x] `/plot_trust <player>` and `/plot_untrust <player>` — grant/revoke per-player build access *(COMPLETE)*
+- [x] Plot boundary visualisation (WireBox overlay via DebugShape)
+- [x] Build-mode UI (toggle, block palette, undo/redo)
+- [ ] Furniture entity type + placement UI
+- [ ] Housing tab in the map window showing owned plots
+- [ ] Server admin panel entries for housing config
 
 ---
 

@@ -200,6 +200,8 @@ fn do_command(
         ServerChatCommand::PlotClear => handle_plot_clear,
         ServerChatCommand::PlotInfo => handle_plot_info,
         ServerChatCommand::PlotRelease => handle_plot_release,
+        ServerChatCommand::PlotTrust => handle_plot_trust,
+        ServerChatCommand::PlotUntrust => handle_plot_untrust,
         ServerChatCommand::Poise => handle_poise,
         ServerChatCommand::Portal => handle_spawn_portal,
         ServerChatCommand::ResetRecipes => handle_reset_recipes,
@@ -2991,6 +2993,15 @@ fn handle_plot_release(
     _args: Vec<String>,
     _action: &ServerChatCommand,
 ) -> CmdResult<()> {
+    // Collect trusted aliases before removing the plot component.
+    let trusted_aliases: Vec<String> = server
+        .state
+        .ecs()
+        .read_storage::<comp::PlayerPlot>()
+        .get(target)
+        .map(|p| p.trusted_aliases.clone())
+        .unwrap_or_default();
+
     if server
         .state
         .ecs()
@@ -3002,6 +3013,15 @@ fn handle_plot_release(
     }
 
     let area_name = format!("player_plot_{}", target.id());
+    // Look up the area_id before removing so we can revoke trusted players.
+    let area_id = server
+        .state
+        .ecs()
+        .read_resource::<AreasContainer<PlayerBuildArea>>()
+        .area_metas()
+        .get(&area_name)
+        .copied();
+
     let _ = server
         .state
         .ecs()
@@ -3016,6 +3036,21 @@ fn handle_plot_release(
     {
         can_build.build_areas.clear();
         can_build.enabled = false;
+    }
+
+    // Revoke build permission from all online trusted players.
+    if let Some(area_id) = area_id {
+        for alias in &trusted_aliases {
+            if let Ok((trustee_entity, _)) = find_alias(server.state.ecs(), alias, false) {
+                let mut can_builds = server.state.ecs().write_storage::<comp::CanBuild>();
+                if let Some(mut cb) = can_builds.get_mut(trustee_entity) {
+                    cb.build_areas.remove(&area_id);
+                    if cb.build_areas.is_empty() {
+                        cb.enabled = false;
+                    }
+                }
+            }
+        }
     }
 
     server.notify_client(target, ServerGeneral::PlotClaimResult(Ok(None)));
@@ -3049,8 +3084,14 @@ fn handle_plot_info(
     if let Some(plot) = plots.get(target) {
         let aabb = plot.area;
         let size = aabb.max - aabb.min;
+        let trusted_str = if plot.trusted_aliases.is_empty() {
+            "none".to_string()
+        } else {
+            plot.trusted_aliases.join(", ")
+        };
         let msg = Content::Plain(format!(
-            "Plot \"{name}\" | min=({x0},{y0},{z0}) max=({x1},{y1},{z1}) size=({sx}×{sy}×{sz})",
+            "Plot \"{name}\" | min=({x0},{y0},{z0}) max=({x1},{y1},{z1}) \
+             size=({sx}×{sy}×{sz}) | trusted: {trusted}",
             name = plot.name,
             x0 = aabb.min.x,
             y0 = aabb.min.y,
@@ -3061,6 +3102,7 @@ fn handle_plot_info(
             sx = size.x,
             sy = size.y,
             sz = size.z,
+            trusted = trusted_str,
         ));
         drop(plots);
         server.notify_client(
@@ -3083,6 +3125,165 @@ fn handle_plot_clear(
     let alias = parse_cmd_args!(args, String).ok_or_else(|| action.help_content())?;
     let target_entity = find_alias(server.state.ecs(), &alias, true)?.0;
     handle_plot_release(server, client, target_entity, vec![], action)
+}
+
+fn handle_plot_trust(
+    server: &mut Server,
+    client: EcsEntity,
+    target: EcsEntity,
+    args: Vec<String>,
+    action: &ServerChatCommand,
+) -> CmdResult<()> {
+    let trustee_alias = parse_cmd_args!(args, String).ok_or_else(|| action.help_content())?;
+
+    // The target must own a plot.
+    let (area_name, area_id) = {
+        let plots = server.state.ecs().read_storage::<comp::PlayerPlot>();
+        if plots.get(target).is_none() {
+            return Err(Content::localized("command-plot_info-not_owned"));
+        }
+        drop(plots);
+        let area_name = format!("player_plot_{}", target.id());
+        let area_id = server
+            .state
+            .ecs()
+            .read_resource::<AreasContainer<PlayerBuildArea>>()
+            .area_metas()
+            .get(&area_name)
+            .copied()
+            .ok_or_else(|| Content::localized("command-plot_info-not_owned"))?;
+        (area_name, area_id)
+    };
+    let _ = area_name; // used only to compute area_id
+
+    // The trustee must be online and distinct from the owner.
+    let (trustee_entity, _) = find_alias(server.state.ecs(), &trustee_alias, false)?;
+    if trustee_entity == target {
+        return Err(Content::localized("command-plot_trust-self"));
+    }
+
+    // Add to trusted list (deduplicate).
+    {
+        let mut plots = server.state.ecs().write_storage::<comp::PlayerPlot>();
+        if let Some(plot) = plots.get_mut(target) {
+            if !plot.trusted_aliases.contains(&trustee_alias) {
+                plot.trusted_aliases.push(trustee_alias.clone());
+            }
+        }
+    }
+
+    // Grant the trustee build permission on the owner's plot area.
+    {
+        let mut can_builds = server.state.ecs().write_storage::<comp::CanBuild>();
+        if let Some(mut cb) = can_builds.get_mut(trustee_entity) {
+            cb.enabled = true;
+            cb.build_areas.insert(area_id);
+        } else {
+            let mut new_cb = comp::CanBuild {
+                enabled: true,
+                build_areas: Default::default(),
+            };
+            new_cb.build_areas.insert(area_id);
+            let _ = can_builds.insert(trustee_entity, new_cb);
+        }
+    }
+
+    // Notify both parties.
+    let owner_alias = server
+        .state
+        .ecs()
+        .read_storage::<comp::Player>()
+        .get(target)
+        .map(|p| p.alias.clone())
+        .unwrap_or_default();
+    server.notify_client(
+        trustee_entity,
+        ServerGeneral::server_msg(
+            ChatType::CommandInfo,
+            Content::localized_with_args("command-plot_trust-trustee-notified", [
+                ("owner", owner_alias.as_str()),
+            ]),
+        ),
+    );
+    server.notify_client(
+        client,
+        ServerGeneral::server_msg(
+            ChatType::CommandInfo,
+            Content::localized_with_args("command-plot_trust-granted", [
+                ("player", trustee_alias.as_str()),
+            ]),
+        ),
+    );
+    Ok(())
+}
+
+fn handle_plot_untrust(
+    server: &mut Server,
+    client: EcsEntity,
+    target: EcsEntity,
+    args: Vec<String>,
+    action: &ServerChatCommand,
+) -> CmdResult<()> {
+    let trustee_alias = parse_cmd_args!(args, String).ok_or_else(|| action.help_content())?;
+
+    // The target must own a plot.
+    let area_id = {
+        let plots = server.state.ecs().read_storage::<comp::PlayerPlot>();
+        if plots.get(target).is_none() {
+            return Err(Content::localized("command-plot_info-not_owned"));
+        }
+        drop(plots);
+        let area_name = format!("player_plot_{}", target.id());
+        server
+            .state
+            .ecs()
+            .read_resource::<AreasContainer<PlayerBuildArea>>()
+            .area_metas()
+            .get(&area_name)
+            .copied()
+    };
+
+    // Remove from trusted list.
+    let was_trusted = {
+        let mut plots = server.state.ecs().write_storage::<comp::PlayerPlot>();
+        if let Some(plot) = plots.get_mut(target) {
+            let before = plot.trusted_aliases.len();
+            plot.trusted_aliases.retain(|a| a != &trustee_alias);
+            plot.trusted_aliases.len() < before
+        } else {
+            false
+        }
+    };
+
+    if !was_trusted {
+        return Err(Content::localized_with_args("command-plot_untrust-not-trusted", [
+            ("player", trustee_alias.as_str()),
+        ]));
+    }
+
+    // If the trustee is online, revoke their build permission on this area.
+    if let Some(area_id) = area_id {
+        if let Ok((trustee_entity, _)) = find_alias(server.state.ecs(), &trustee_alias, false) {
+            let mut can_builds = server.state.ecs().write_storage::<comp::CanBuild>();
+            if let Some(mut cb) = can_builds.get_mut(trustee_entity) {
+                cb.build_areas.remove(&area_id);
+                if cb.build_areas.is_empty() {
+                    cb.enabled = false;
+                }
+            }
+        }
+    }
+
+    server.notify_client(
+        client,
+        ServerGeneral::server_msg(
+            ChatType::CommandInfo,
+            Content::localized_with_args("command-plot_untrust-revoked", [
+                ("player", trustee_alias.as_str()),
+            ]),
+        ),
+    );
+    Ok(())
 }
 
 fn handle_build(

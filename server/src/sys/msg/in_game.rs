@@ -408,10 +408,22 @@ impl Sys {
                 } else {
                     // Remove build permission for the player's named area.
                     let area_name = format!("player_plot_{}", entity.id());
+                    // Capture area_id before removing so we can revoke trusted players.
+                    let area_id = guard.player_build_areas.area_metas().get(&area_name).copied();
                     let _ = guard.player_build_areas.remove(&area_name);
                     if let Some(mut can_build) = guard.can_builds.get_mut(entity) {
                         can_build.build_areas.clear();
                         can_build.enabled = false;
+                    }
+                    // Remove the now-invalid area_id from every entity that held it
+                    // (these are the trusted players). This is more robust than a
+                    // name-based lookup since it doesn't require iterating Players.
+                    if let Some(area_id) = area_id {
+                        for mut cb in (&mut *guard.can_builds).join() {
+                            if cb.build_areas.remove(&area_id) && cb.build_areas.is_empty() {
+                                cb.enabled = false;
+                            }
+                        }
                     }
                     drop(guard);
                     let _ =

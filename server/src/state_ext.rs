@@ -763,6 +763,56 @@ impl StateExt for State {
                 }
             }
 
+            // Grant build access to any plots where this player's alias is trusted.
+            // We look up the logged-in player's alias and scan every other player's
+            // `PlayerPlot`. If the alias appears in the trust list, we grant `CanBuild`
+            // access to that plot's registered area.
+            {
+                let my_alias = self
+                    .ecs()
+                    .read_storage::<comp::Player>()
+                    .get(entity)
+                    .map(|p| p.alias.clone())
+                    .unwrap_or_default();
+
+                // Collect (owner_entity_id, area_id) pairs where we are trusted.
+                let trusted_areas: Vec<_> = {
+                    let plots = self.ecs().read_storage::<comp::PlayerPlot>();
+                    let area_container =
+                        self.ecs().read_resource::<AreasContainer<PlayerBuildArea>>();
+                    let entities = self.ecs().entities();
+                    (&entities, &plots)
+                        .join()
+                        .filter(|(owner, plot)| {
+                            *owner != entity && plot.trusted_aliases.contains(&my_alias)
+                        })
+                        .filter_map(|(owner, _)| {
+                            let area_name = format!("player_plot_{:?}", owner.id());
+                            area_container.area_metas().get(&area_name).copied()
+                        })
+                        .collect()
+                };
+
+                if !trusted_areas.is_empty() {
+                    let mut can_builds = self.ecs().write_storage::<comp::CanBuild>();
+                    if let Some(mut cb) = can_builds.get_mut(entity) {
+                        cb.enabled = true;
+                        for area_id in trusted_areas {
+                            cb.build_areas.insert(area_id);
+                        }
+                    } else {
+                        let mut new_cb = comp::CanBuild {
+                            enabled: true,
+                            build_areas: Default::default(),
+                        };
+                        for area_id in trusted_areas {
+                            new_cb.build_areas.insert(area_id);
+                        }
+                        let _ = can_builds.insert(entity, new_cb);
+                    }
+                }
+            }
+
             let player_pos = self.ecs().read_storage::<comp::Pos>().get(entity).copied();
             if let Some(player_pos) = player_pos {
                 trace!(
