@@ -4887,6 +4887,7 @@ impl Hud {
             ScaleChange::Adjust(scale) => ScaleMode::Absolute(scale),
             ScaleChange::ToAbsolute => self.ui.scale().scaling_mode_as_absolute(),
             ScaleChange::ToRelative => self.ui.scale().scaling_mode_as_relative(),
+            ScaleChange::ToDpiAuto => ScaleMode::DpiFactor,
         };
         self.ui.set_scaling_mode(scale_mode);
         scale_mode

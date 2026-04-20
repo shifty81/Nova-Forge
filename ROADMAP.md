@@ -26,7 +26,7 @@ The current absolute-scale slider was capped at 2.0×, making icons and text ver
 
 - [x] Extend slider range from 2.0× to 4.0× for large monitor users
 - [x] Update the dropdown preset list to include 2.5, 3.0, 3.5, 4.0
-- [ ] Add a "DPI-aware auto" default that detects monitor DPI and sets a sensible scale *(PLANNED)*
+- [ ] Add a "DPI-aware auto" default that detects monitor DPI and sets a sensible scale *(COMPLETE)*
 
 ### Singleplayer world management *(PLANNED)*
 
