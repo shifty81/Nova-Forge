@@ -336,7 +336,7 @@ impl ServerEvent for MineBlockEvent {
                             })
                     };
 
-                    // Stage changes happen in damage interval of `mine_drop_intevral`
+                    // Stage changes happen in damage interval of `mine_drop_interval`
                     let stage_changed = damage
                         .and_then(|damage| Some((sprite?.mine_drop_interval(), damage)))
                         .is_some_and(|(interval, damage)| damage % interval == 0);

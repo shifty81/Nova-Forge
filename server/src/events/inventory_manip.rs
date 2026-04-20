@@ -708,9 +708,9 @@ impl ServerEvent for InventoryManipEvent {
                                                 .get(target_pos)
                                                 .ok()
                                                 .copied();
-                                            // Note: `is_fluid()` in this engine means "not filled" –
-                                            // it includes both air and liquid blocks (not just
-                                            // water). Air IS a fluid here.
+                                            // Note: `is_fluid()` returns true for non-solid blocks
+                                            // (air and liquids), the inverse of `is_filled()`.
+                                            // Air IS a fluid in this engine's terminology.
                                             let can_place = below
                                                 .is_some_and(|b| b.is_filled())
                                                 && at.is_some_and(|b| {
