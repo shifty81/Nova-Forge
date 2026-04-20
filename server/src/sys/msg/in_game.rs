@@ -420,11 +420,11 @@ impl Sys {
                     // (these are the trusted players). This is more robust than a
                     // name-based lookup since it doesn't require iterating Players.
                     if let Some(area_id) = area_id {
-                        for cb in (&mut *guard.can_builds).join() {
+                        (&mut *guard.can_builds).lend_join().for_each(|cb| {
                             if cb.build_areas.remove(&area_id) && cb.build_areas.is_empty() {
                                 cb.enabled = false;
                             }
-                        }
+                        });
                     }
                     drop(guard);
                     let _ =
