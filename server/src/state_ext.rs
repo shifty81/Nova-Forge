@@ -737,11 +737,17 @@ impl StateExt for State {
                 // Re-register the player's plot area so the server enforces build
                 // permissions even before the player sends a new ClaimPlot message.
                 let area_name = format!("player_plot_{}", entity.id());
-                if let Ok(area_id) = self
-                    .ecs()
-                    .write_resource::<AreasContainer<PlayerBuildArea>>()
-                    .insert(area_name, plot.area)
-                {
+                // Remove any stale entry left from a previous session that used the
+                // same entity index (specs recycles entity indices, so this name can
+                // collide with an orphaned entry from a different character).
+                let area_id = {
+                    let mut container = self
+                        .ecs()
+                        .write_resource::<AreasContainer<PlayerBuildArea>>();
+                    let _ = container.remove(&area_name);
+                    container.insert(area_name, plot.area).ok()
+                };
+                if let Some(area_id) = area_id {
                     let mut can_builds = self.ecs().write_storage::<comp::CanBuild>();
                     if let Some(mut can_build) = can_builds.get_mut(entity) {
                         can_build.enabled = true;
