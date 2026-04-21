@@ -138,7 +138,7 @@ Track changes to systems scheduled for retirement here. Update this table when a
 
 | Module | Track A file(s) | Track B replacement | Status |
 |--------|----------------|---------------------|--------|
-| *(none yet)* | — | — | — |
+| World generation | `world/src/lib.rs`, `world/src/sim/mod.rs` | *Pending — Track B pipeline* | Toggle wired end-to-end (`SingleplayerWorld::use_experimental` → `server::Settings::experimental_worldgen`); pipeline still uses Track A until the replacement lands |
 
 ---
 

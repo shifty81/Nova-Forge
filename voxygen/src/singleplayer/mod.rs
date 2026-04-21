@@ -127,6 +127,7 @@ impl SingleplayerState {
             settings.map_file = Some(file_opts);
             settings.world_seed = world.seed;
             settings.day_length = world.day_length;
+            settings.experimental_worldgen = world.use_experimental;
             settings.gameplay = GameplaySettings {
                 battle_mode: ServerBattleMode::Global(if world.pvp {
                     BattleMode::PvP
@@ -238,6 +239,7 @@ impl SingleplayerState {
             let world_max_players = world.max_players;
             let world_pvp = world.pvp;
             let world_difficulty = world.difficulty;
+            let world_use_experimental = world.use_experimental;
 
             let mut settings = server::Settings::lan_coop(&server_data_dir);
             let mut editable_settings =
@@ -273,6 +275,7 @@ impl SingleplayerState {
             settings.day_length = world.day_length;
             settings.server_name = world_name.clone();
             settings.max_players = world_max_players;
+            settings.experimental_worldgen = world_use_experimental;
             settings.gameplay = GameplaySettings {
                 battle_mode: ServerBattleMode::Global(if world_pvp {
                     BattleMode::PvP

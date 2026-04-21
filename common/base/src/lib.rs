@@ -24,10 +24,10 @@ pub fn local_lan_ip() -> Option<std::net::IpAddr> {
     ];
     let socket = std::net::UdpSocket::bind("0.0.0.0:0").ok()?;
     for &addr in PROBE_ADDRS {
-        if socket.connect(addr).is_ok() {
-            if let Some(ip) = socket.local_addr().ok().map(|a| a.ip()) {
-                return Some(ip);
-            }
+        if socket.connect(addr).is_ok()
+            && let Some(ip) = socket.local_addr().ok().map(|a| a.ip())
+        {
+            return Some(ip);
         }
     }
     None

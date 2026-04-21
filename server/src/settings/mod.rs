@@ -247,6 +247,22 @@ pub struct Settings {
     #[serde(default, skip_serializing)]
     pub experimental_terrain_persistence: bool,
 
+    /// Track B "Experimental" world-generation lane toggle (per-world,
+    /// sourced from `SingleplayerWorld::use_experimental`).
+    ///
+    /// When `true`, the server is running a Nova-Forge experimental-lane
+    /// world as described in `PARALLEL_CONVERSION_FRAMEWORK.md`.  The
+    /// underlying world-generation pipeline currently mirrors the stable
+    /// Track A path — the flag is the single integration point the future
+    /// Track B pipeline will consume, so every other subsystem that later
+    /// needs to branch on the lane can read it here rather than threading
+    /// its own channel through the singleplayer/server boundary.
+    ///
+    /// Not persisted in `server_config/settings.ron`: the authoritative
+    /// value lives in each world's `meta.ron` (schema V4+).
+    #[serde(default, skip_serializing)]
+    pub experimental_worldgen: bool,
+
     #[serde(default)]
     pub gameplay: GameplaySettings,
     #[serde(default)]
@@ -280,6 +296,7 @@ impl Default for Settings {
             client_timeout: Duration::from_secs(40),
             max_player_for_kill_broadcast: None,
             experimental_terrain_persistence: false,
+            experimental_worldgen: false,
             gameplay: GameplaySettings::default(),
             moderation: ModerationSettings::default(),
             world: WorldSettings::default(),

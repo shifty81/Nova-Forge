@@ -269,6 +269,26 @@ impl Server {
         if settings.auth_server_address.is_none() {
             info!("Authentication is disabled");
         }
+        if settings.experimental_worldgen {
+            // Track B Experimental world-generation lane per
+            // `PARALLEL_CONVERSION_FRAMEWORK.md`.  The flag is plumbed in
+            // from the per-world `meta.ron` so downstream subsystems
+            // (future Nova-Forge worldgen, site archetypes, economy loop)
+            // can branch on it without re-threading their own channel.
+            //
+            // Note: there is currently no Track B pipeline wired yet —
+            // the world is still generated via the Track A path, but the
+            // toggle is now fully routed end-to-end (UI → meta.ron →
+            // Settings → Server) so the replacement can slot in without
+            // any further plumbing work.
+            info!(
+                "World generation lane: Experimental (Track B) — Nova-Forge conversion path \
+                 (under construction; falls back to stable pipeline until Track B worldgen is \
+                 implemented)"
+            );
+        } else {
+            info!("World generation lane: Stable (Track A)");
+        }
 
         report_stage(ServerInitStage::DbMigrations);
         // Run pending DB migrations (if any)
