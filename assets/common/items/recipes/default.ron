@@ -80,6 +80,18 @@ ItemDef(
             "sewing_set",
             "tin_pickaxe",
             "shovel",
+            // Crafting stations — hand-craftable or craftable at the crafting bench
+            "crafting_bench",
+            "campfire",
+            "forge",
+            "cauldron",
+            "anvil",
+            "cooking_pot",
+            "spinning_wheel",
+            "tanning_rack",
+            "loom",
+            "dismantling_bench",
+            "repair_bench",
             // Bags
             "tiny_red_pouch",
             "tiny_leather_pouch",

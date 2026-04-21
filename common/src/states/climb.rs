@@ -1,6 +1,6 @@
 use crate::{
     comp::{
-        CharacterState, InputKind, Ori, StateUpdate,
+        CharacterState, InputKind, InventoryAction, Ori, StateUpdate,
         character_state::OutputEvents,
         skills::{ClimbSkill::*, SKILL_MODIFIERS, Skill},
     },
@@ -133,6 +133,17 @@ impl CharacterBehavior for Data {
     fn stand(&self, data: &JoinData, _output_events: &mut OutputEvents) -> StateUpdate {
         let mut update = StateUpdate::from(data);
         self.update_state_on_leaving(&mut update);
+        update
+    }
+
+    fn manipulate_loadout(
+        &self,
+        data: &JoinData,
+        output_events: &mut OutputEvents,
+        inv_action: InventoryAction,
+    ) -> StateUpdate {
+        let mut update = StateUpdate::from(data);
+        handle_manipulate_loadout(data, output_events, &mut update, inv_action);
         update
     }
 

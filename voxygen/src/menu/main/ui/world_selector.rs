@@ -652,77 +652,80 @@ impl Screen {
                 }
             }
 
-            // PvP / PvE mode toggle
-            gen_content.push(
-                Text::new(i18n.get_msg("main-singleplayer-pvp_mode"))
-                    .size(SLIDER_TEXT_SIZE)
-                    .horizontal_alignment(iced::HorizontalAlignment::Center)
+            // PvP / PvE mode toggle — only relevant for LAN co-op where others connect
+            if lan_mode {
+                gen_content.push(
+                    Text::new(i18n.get_msg("main-singleplayer-pvp_mode"))
+                        .size(SLIDER_TEXT_SIZE)
+                        .horizontal_alignment(iced::HorizontalAlignment::Center)
+                        .into(),
+                );
+                gen_content.push(
+                    Row::with_children(vec![
+                        {
+                            let (r, g, b) = mode_btn_color(world.pvp);
+                            Button::new(
+                                &mut self.pvp_button,
+                                Row::with_children(vec![
+                                    Space::new(Length::FillPortion(5), Length::Units(0)).into(),
+                                    Text::new(i18n.get_msg("main-singleplayer-pvp"))
+                                        .width(Length::FillPortion(95))
+                                        .size(fonts.cyri.scale(14))
+                                        .vertical_alignment(iced::VerticalAlignment::Center)
+                                        .into(),
+                                ])
+                                .align_items(Align::Center),
+                            )
+                            .style(
+                                style::button::Style::new(imgs.selection)
+                                    .hover_image(imgs.selection_hover)
+                                    .press_image(imgs.selection_press)
+                                    .image_color(Rgba::new(r, g, b, 192)),
+                            )
+                            .width(Length::FillPortion(1))
+                            .min_height(18)
+                            .on_press(Message::WorldChanged(
+                                super::WorldsChange::CurrentWorldChange(WorldChange::Pvp(true)),
+                            ))
+                            .into()
+                        },
+                        {
+                            let (r, g, b) = mode_btn_color(!world.pvp);
+                            Button::new(
+                                &mut self.pve_button,
+                                Row::with_children(vec![
+                                    Space::new(Length::FillPortion(5), Length::Units(0)).into(),
+                                    Text::new(i18n.get_msg("main-singleplayer-pve"))
+                                        .width(Length::FillPortion(95))
+                                        .size(fonts.cyri.scale(14))
+                                        .vertical_alignment(iced::VerticalAlignment::Center)
+                                        .into(),
+                                ])
+                                .align_items(Align::Center),
+                            )
+                            .style(
+                                style::button::Style::new(imgs.selection)
+                                    .hover_image(imgs.selection_hover)
+                                    .press_image(imgs.selection_press)
+                                    .image_color(Rgba::new(r, g, b, 192)),
+                            )
+                            .width(Length::FillPortion(1))
+                            .min_height(18)
+                            .on_press(Message::WorldChanged(
+                                super::WorldsChange::CurrentWorldChange(WorldChange::Pvp(false)),
+                            ))
+                            .into()
+                        },
+                    ])
                     .into(),
-            );
-            gen_content.push(
-                Row::with_children(vec![
-                    {
-                        let (r, g, b) = mode_btn_color(world.pvp);
-                        Button::new(
-                            &mut self.pvp_button,
-                            Row::with_children(vec![
-                                Space::new(Length::FillPortion(5), Length::Units(0)).into(),
-                                Text::new(i18n.get_msg("main-singleplayer-pvp"))
-                                    .width(Length::FillPortion(95))
-                                    .size(fonts.cyri.scale(14))
-                                    .vertical_alignment(iced::VerticalAlignment::Center)
-                                    .into(),
-                            ])
-                            .align_items(Align::Center),
-                        )
-                        .style(
-                            style::button::Style::new(imgs.selection)
-                                .hover_image(imgs.selection_hover)
-                                .press_image(imgs.selection_press)
-                                .image_color(Rgba::new(r, g, b, 192)),
-                        )
-                        .width(Length::FillPortion(1))
-                        .min_height(18)
-                        .on_press(Message::WorldChanged(
-                            super::WorldsChange::CurrentWorldChange(WorldChange::Pvp(true)),
-                        ))
-                        .into()
-                    },
-                    {
-                        let (r, g, b) = mode_btn_color(!world.pvp);
-                        Button::new(
-                            &mut self.pve_button,
-                            Row::with_children(vec![
-                                Space::new(Length::FillPortion(5), Length::Units(0)).into(),
-                                Text::new(i18n.get_msg("main-singleplayer-pve"))
-                                    .width(Length::FillPortion(95))
-                                    .size(fonts.cyri.scale(14))
-                                    .vertical_alignment(iced::VerticalAlignment::Center)
-                                    .into(),
-                            ])
-                            .align_items(Align::Center),
-                        )
-                        .style(
-                            style::button::Style::new(imgs.selection)
-                                .hover_image(imgs.selection_hover)
-                                .press_image(imgs.selection_press)
-                                .image_color(Rgba::new(r, g, b, 192)),
-                        )
-                        .width(Length::FillPortion(1))
-                        .min_height(18)
-                        .on_press(Message::WorldChanged(
-                            super::WorldsChange::CurrentWorldChange(WorldChange::Pvp(false)),
-                        ))
-                        .into()
-                    },
-                ])
-                .into(),
-            );
+                );
+            }
 
             // Difficulty toggle (Easy / Normal / Hard)
             gen_content.push(
                 Text::new(i18n.get_msg("main-singleplayer-difficulty"))
                     .size(SLIDER_TEXT_SIZE)
+                    .color([0.9, 0.9, 0.9])
                     .horizontal_alignment(iced::HorizontalAlignment::Center)
                     .into(),
             );

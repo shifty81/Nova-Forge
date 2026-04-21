@@ -842,6 +842,12 @@ impl Widget for Crafting<'_> {
         for (i, (name, recipe, is_craftable, has_materials, knows_recipe)) in ordered_recipes
             .into_iter()
             .filter(|(_, recipe, _, _, _)| self.show.crafting_fields.crafting_tab.satisfies(recipe))
+            // When at a specific crafting station, hide recipes for which the player
+            // does not have the required materials — they clutter the list and can't
+            // be made anyway.
+            .filter(|(_, _, _, has_materials, _)| {
+                self.show.crafting_fields.craft_sprite.is_none() || *has_materials
+            })
             .enumerate()
         {
             let button = Button::image(if state.selected_recipe.as_ref() == Some(name) {
