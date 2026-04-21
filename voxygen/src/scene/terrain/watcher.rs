@@ -246,6 +246,10 @@ impl BlocksOfInterest {
                                 fires.push(pos);
                                 interactables.push((pos, Interaction::Craft(CraftingTab::Food)))
                             },
+                            SpriteKind::BonfireMLit => {
+                                fires.push(pos);
+                                smokers.push(SmokerProperties::new(pos, FireplaceType::House));
+                            },
                             SpriteKind::DismantlingBench => interactables
                                 .push((pos, Interaction::Craft(CraftingTab::Dismantle))),
                             SpriteKind::RepairBench => {

@@ -43,6 +43,31 @@
         "voxel.sprite.crafting_station.repair_bench",
         (0.0, 0.0, 0.0), (-50.0, 40.0, 30.0), 0.9,
     ),
+    // Crafting station inventory icons (used when items are held in player inventory)
+    Simple("common.items.crafting_tools.crafting_bench"): VoxTrans(
+        "voxel.sprite.crafting_station.crafting_bench",
+        (0.0, 0.0, 0.0), (-50.0, 40.0, 20.0), 1.0,
+    ),
+    Simple("common.items.crafting_tools.forge"): VoxTrans(
+        "voxel.sprite.crafting_station.forge",
+        (0.0, 0.0, 0.0), (-80.0, 20.0, 0.0), 1.0,
+    ),
+    Simple("common.items.crafting_tools.anvil"): VoxTrans(
+        "voxel.sprite.crafting_station.anvil",
+        (0.5, 0.5, 0.0), (0.0, 60.0, 90.0), 1.0,
+    ),
+    Simple("common.items.crafting_tools.dismantling_bench"): VoxTrans(
+        "voxel.sprite.crafting_station.salvaging_station",
+        (0.0, 0.0, 0.0), (-50.0, 40.0, 30.0), 0.9,
+    ),
+    Simple("common.items.crafting_tools.repair_bench"): VoxTrans(
+        "voxel.sprite.crafting_station.repair_bench",
+        (0.0, 0.0, 0.0), (-50.0, 40.0, 30.0), 0.9,
+    ),
+    Simple("common.items.crafting_tools.campfire"): VoxTrans(
+        "voxel.sprite.furniture.bonfire_M_lit",
+        (0.0, 0.0, 0.0), (-50.0, 40.0, 20.0), 0.9,
+    ),
     // Recipe Icon
     Simple("Recipe"): VoxTrans(
         "voxel.item.recipe.recipe_basic",

@@ -1194,6 +1194,9 @@ impl SpriteKind {
                 Some((Vec3::new(0.0, 0.0, 0.1), -Vec3::unit_x()))
             },
             SpriteKind::Bedroll => Some((Vec3::new(0.0, 0.0, 0.1), Vec3::unit_y())),
+            // Campfire — sit on the ground next to it, offset to the side so the player
+            // isn't inside the fire itself.
+            SpriteKind::BonfireMLit => Some((Vec3::new(1.5, 0.0, 0.0), Vec3::unit_x())),
             _ => None,
         }
     }
@@ -1213,6 +1216,11 @@ impl SpriteKind {
         )
     }
 
+    /// Whether this sprite is a campfire / hearth that should grant resting
+    /// heal when sat at.
+    #[inline]
+    pub fn is_campfire(&self) -> bool { matches!(self, SpriteKind::BonfireMLit) }
+
     #[inline]
     pub fn is_mountable(&self) -> bool { self.mount_offset().is_some() }
 
@@ -1223,6 +1231,11 @@ impl SpriteKind {
             sprite if sprite.is_bed() => Some(vec![BuffEffect {
                 kind: BuffKind::RestingHeal,
                 data: BuffData::new(0.02, Some(Secs(1.0))),
+                cat_ids: Vec::new(),
+            }]),
+            sprite if sprite.is_campfire() => Some(vec![BuffEffect {
+                kind: BuffKind::RestingHeal,
+                data: BuffData::new(0.01, Some(Secs(1.0))),
                 cat_ids: Vec::new(),
             }]),
             _ => None,
