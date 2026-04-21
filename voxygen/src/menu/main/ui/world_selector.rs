@@ -9,7 +9,7 @@ use vek::Rgba;
 
 use crate::{
     menu::main::ui::{FILL_FRAC_TWO, WorldsChange},
-    singleplayer::singleplayer_world::Difficulty,
+    singleplayer::Difficulty,
     ui::{
         fonts::IcedFonts,
         ice::{
