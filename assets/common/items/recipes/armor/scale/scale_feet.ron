@@ -1,0 +1,11 @@
+ItemDef(
+    legacy_name: "",
+    legacy_description: "",
+    kind: RecipeGroup(
+        recipes: [
+            "scale_feet",
+        ],
+    ),
+    quality: Moderate,
+    tags: [],
+)

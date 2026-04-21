@@ -80,6 +80,7 @@ gameinput-mutesfx = Mute SFX Volume
 gameinput-muteambience = Mute Ambience Volume
 gameinput-togglewalk = Toggle Walking
 gameinput-togglebuildmode = Toggle Build Mode
+gameinput-splitstack = Split Stack
 gamepad-south = South
 gamepad-east = East
 gamepad-north = North

@@ -5190,6 +5190,29 @@ impl Hud {
                     GameInput::MuteAmbience if state => {
                         toggle_mute(Audio::MuteAmbienceVolume(!gs_audio.ambience_volume.muted))
                     },
+                    GameInput::SplitStack if state && self.show.bag => {
+                        if let Some(slots::SlotKind::Inventory(inv_slot)) =
+                            self.slot_manager.mouse_over_slot
+                            && inv_slot.ours
+                            && let Slot::Inventory(from_inv) = inv_slot.slot
+                            && let Some(inventory) = client_inventory
+                            && inventory
+                                .get(from_inv)
+                                .is_some_and(|item| item.amount() > 1)
+                        {
+                            if let Some((empty_id, _)) = inventory
+                                .slots_with_id()
+                                .find(|(_, slot)| slot.is_none())
+                            {
+                                events.push(Event::SplitSwapSlots {
+                                    slot_a: Slot::Inventory(from_inv),
+                                    slot_b: Slot::Inventory(empty_id),
+                                    bypass_dialog: false,
+                                });
+                            }
+                        }
+                        true
+                    },
                     GameInput::Interact if state => {
                         // Send ACKs during conversation
                         if let Some((sender, _, dialogue)) = &self.current_dialogue
