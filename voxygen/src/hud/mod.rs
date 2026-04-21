@@ -5204,7 +5204,7 @@ impl Hud {
                                 .slots_with_id()
                                 .find(|(_, slot)| slot.is_none())
                             {
-                                events.push(Event::SplitSwapSlots {
+                                self.events.push(Event::SplitSwapSlots {
                                     slot_a: Slot::Inventory(from_inv),
                                     slot_b: Slot::Inventory(empty_id),
                                     bypass_dialog: false,
