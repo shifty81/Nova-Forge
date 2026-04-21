@@ -217,6 +217,7 @@ impl ControlSettings {
             GameInput::MuteAmbience => return None,
             GameInput::ToggleWalk => char("B"),
             GameInput::ToggleBuildMode => Key::Named(NamedKey::F5),
+            GameInput::SplitStack => char("Z"),
         }))
     }
 }
