@@ -28,7 +28,7 @@ use rand::{rng, seq::IndexedRandom};
 use std::time::Duration;
 use tracing::warn;
 #[cfg(feature = "singleplayer")]
-use crate::singleplayer::singleplayer_world::Difficulty;
+use crate::singleplayer::Difficulty;
 #[cfg(feature = "singleplayer")]
 use common_base::local_lan_ip;
 #[cfg(feature = "singleplayer")]
