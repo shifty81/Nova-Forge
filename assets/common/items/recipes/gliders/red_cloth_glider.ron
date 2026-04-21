@@ -1,0 +1,11 @@
+ItemDef(
+    legacy_name: "",
+    legacy_description: "",
+    kind: RecipeGroup(
+        recipes: [
+            "red_cloth_glider",
+        ],
+    ),
+    quality: Moderate,
+    tags: [],
+)
