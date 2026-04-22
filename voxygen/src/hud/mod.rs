@@ -2323,15 +2323,16 @@ impl Hud {
                         overitem_properties,
                         self.pulse,
                         {
-                            // If there is a Craft interaction available, hide Mine
-                            // interactions so "needs pickaxe" doesn't spam alongside "Use".
-                            let has_craft = interactions
+                            // If there is a Craft or Mount interaction available, hide Mine
+                            // interactions so "needs pickaxe" doesn't spam alongside "Use" or
+                            // "Sit".
+                            let suppress_mine = interactions
                                 .iter()
-                                .any(|i| matches!(i, BlockInteraction::Craft(_)));
+                                .any(|i| matches!(i, BlockInteraction::Craft(_) | BlockInteraction::Mount));
                             interactions
                                 .iter()
                                 .filter(|i| {
-                                    !has_craft || !matches!(i, BlockInteraction::Mine(_))
+                                    !suppress_mine || !matches!(i, BlockInteraction::Mine(_))
                                 })
                                 .map(|interaction| interaction_text(interaction))
                                 .collect()

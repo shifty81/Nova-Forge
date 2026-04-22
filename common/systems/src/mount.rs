@@ -277,6 +277,19 @@ impl<'a> System<'a> for Sys {
                 }
             }
 
+            // When mounted on a campfire sprite, ensure the rider is in the Sit
+            // character state so the healing animation plays correctly and the
+            // resting-heal aura condition is satisfied.
+            if is_volume_rider.block.get_sprite().is_some_and(|s| s.is_campfire())
+                && !char_states
+                    .get(entity)
+                    .is_some_and(CharacterState::is_sitting)
+            {
+                if let Some(controller) = controllers.get_mut(entity) {
+                    controller.push_action(ControlAction::Sit);
+                }
+            }
+
             let inputs = controllers.get_mut(entity).map(|c| {
                 let actions: Vec<_> = c
                     .actions
