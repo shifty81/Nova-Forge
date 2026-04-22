@@ -1,0 +1,27 @@
+{
+  "documentType": "PCGRuleSetDocument",
+  "ruleSetId": "default_surface_generation",
+  "displayName": "Default Surface Generation",
+  "generatorType": "SurfaceScatter",
+  "seedPolicy": "Deterministic",
+  "biomeFilters": ["temperate_forest", "grassland", "highland", "desert", "snow"],
+  "assetPools": [
+    {
+      "poolId": "surface_sprites",
+      "assets": [
+        { "assetId": "campfire",            "weight": 0.5 },
+        { "assetId": "chest_common",        "weight": 1.0 },
+        { "assetId": "workbench_carpentry", "weight": 0.3 }
+      ]
+    },
+    {
+      "poolId": "surface_structures",
+      "assets": [
+        { "assetId": "dungeon_door",        "weight": 0.2 },
+        { "assetId": "storage_crate_small", "weight": 1.5 }
+      ]
+    }
+  ],
+  "density": { "min": 0.02, "max": 0.15 },
+  "placement": { "minSpacing": 4.0, "maxSlope": 30.0 }
+}

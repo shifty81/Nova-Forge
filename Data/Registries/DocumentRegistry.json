@@ -1,0 +1,23 @@
+{
+  "documents": [
+    { "documentType": "WorldDocument",           "path": "Data/Worlds/DefaultWorld.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Armor/boreal_chest.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Armor/boreal_back.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Armor/cloth_blue_chest.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Weapons/iron_sword.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Weapons/short_bow.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Tools/pickaxe_stone.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Sprites/campfire.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Sprites/chest_common.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Sprites/workbench_carpentry.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Characters/human_body.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Creatures/wolf.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/NPCs/villager.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Structures/dungeon_door.json" },
+    { "documentType": "AssetDocument",            "path": "Data/Assets/Props/storage_crate_small.json" },
+    { "documentType": "CharacterRulesDocument",   "path": "Data/Rules/CharacterRules.json" },
+    { "documentType": "EconomyRulesDocument",     "path": "Data/Rules/EconomyRules.json" },
+    { "documentType": "ProgressionRulesDocument", "path": "Data/Rules/ProgressionRules.json" },
+    { "documentType": "PCGRuleSetDocument",       "path": "Data/PCG/RuleSets/DefaultSurfaceGeneration.json" }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "targets": [
+    { "targetId": "workspace_host",    "displayName": "Atlas Workspace",  "kind": "workspace" },
+    { "targetId": "novaforge_client",  "displayName": "NovaForge Client",  "kind": "client"    },
+    { "targetId": "novaforge_server",  "displayName": "NovaForge Server",  "kind": "server"    }
+  ]
+}

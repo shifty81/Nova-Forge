@@ -1,0 +1,20 @@
+{
+  "documentType": "WorldDocument",
+  "worldId": "novaforge_default_world",
+  "displayName": "Nova-Forge World",
+  "seed": 12345,
+  "environment": {
+    "skyProfile": "overworld_day",
+    "lightingProfile": "editor_daylight"
+  },
+  "terrain": {
+    "type": "voxel_heightmap",
+    "worldSizeChunks": [1024, 1024],
+    "seaLevel": 140,
+    "biome": "temperate_forest"
+  },
+  "spawn": {
+    "playerStart": { "x": 0, "y": 200, "z": 0 }
+  },
+  "entities": []
+}

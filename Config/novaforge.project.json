@@ -1,0 +1,32 @@
+{
+  "project": {
+    "name": "NovaForge",
+    "type": "unified-monorepo",
+    "version": "0.1.0",
+    "defaultWorld": "DevWorld",
+    "defaultStartupMode": "Editor"
+  },
+  "paths": {
+    "contentRoot": "Content",
+    "configRoot": "Config",
+    "saveRoot": "Saved",
+    "logRoot": "Saved/Logs",
+    "atlasAIRoot": "AtlasAI",
+    "toolsRoot": "Tools",
+    "archiveRoot": "Archive"
+  },
+  "phases": [
+    "Phase0_Foundation",
+    "Phase1_CoreModifications",
+    "Phase2_PlayerHousing",
+    "Phase3_GameplayExtensions",
+    "Phase4_PolishAndRelease"
+  ],
+  "rules": {
+    "voxelAuthoritative": true,
+    "editorShipsWithGame": false,
+    "allowSuiteFeaturesInRepo": true,
+    "atlasAIBrokerEnabled": true,
+    "workspaceEnabled": true
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "documentType": "EconomyRulesDocument",
+  "version": "0.1.0",
+  "currency": "nova_coin",
+  "baseVendorMarkup": 1.2,
+  "sellbackRate": 0.5,
+  "auctionHouseEnabled": false,
+  "playerTradingEnabled": true
+}

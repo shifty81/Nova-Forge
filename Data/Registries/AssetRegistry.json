@@ -1,0 +1,18 @@
+{
+  "assets": [
+    { "assetId": "boreal_chest_armor",      "documentPath": "Data/Assets/Armor/boreal_chest.json",       "category": "Armor"      },
+    { "assetId": "boreal_back_armor",       "documentPath": "Data/Assets/Armor/boreal_back.json",        "category": "Armor"      },
+    { "assetId": "cloth_blue_chest_armor",  "documentPath": "Data/Assets/Armor/cloth_blue_chest.json",   "category": "Armor"      },
+    { "assetId": "iron_sword",              "documentPath": "Data/Assets/Weapons/iron_sword.json",        "category": "Weapons"    },
+    { "assetId": "short_bow",              "documentPath": "Data/Assets/Weapons/short_bow.json",          "category": "Weapons"    },
+    { "assetId": "pickaxe_stone",          "documentPath": "Data/Assets/Tools/pickaxe_stone.json",        "category": "Tools"      },
+    { "assetId": "campfire",               "documentPath": "Data/Assets/Sprites/campfire.json",           "category": "Sprites"    },
+    { "assetId": "chest_common",           "documentPath": "Data/Assets/Sprites/chest_common.json",       "category": "Sprites"    },
+    { "assetId": "workbench_carpentry",    "documentPath": "Data/Assets/Sprites/workbench_carpentry.json","category": "Sprites"    },
+    { "assetId": "human_body",             "documentPath": "Data/Assets/Characters/human_body.json",      "category": "Characters" },
+    { "assetId": "wolf",                   "documentPath": "Data/Assets/Creatures/wolf.json",             "category": "Creatures"  },
+    { "assetId": "villager",               "documentPath": "Data/Assets/NPCs/villager.json",              "category": "NPCs"       },
+    { "assetId": "dungeon_door",           "documentPath": "Data/Assets/Structures/dungeon_door.json",    "category": "Structures" },
+    { "assetId": "storage_crate_small",    "documentPath": "Data/Assets/Props/storage_crate_small.json", "category": "Props"      }
+  ]
+}
