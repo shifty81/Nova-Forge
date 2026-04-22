@@ -1,0 +1,6 @@
+{
+  "defaultRuleSet": "default_surface_generation",
+  "defaultSeed": 12345,
+  "defaultBiome": "temperate_forest",
+  "previewBounds": { "x": 64, "y": 32, "z": 64 }
+}

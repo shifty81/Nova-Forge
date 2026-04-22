@@ -1,0 +1,14 @@
+{
+  "documentType": "CharacterRulesDocument",
+  "version": "0.1.0",
+  "baseHealth": 100,
+  "baseStamina": 100,
+  "baseMana": 50,
+  "levelCap": 60,
+  "xpCurve": "quadratic",
+  "statGrowthPerLevel": {
+    "health": 5,
+    "stamina": 3,
+    "mana": 2
+  }
+}

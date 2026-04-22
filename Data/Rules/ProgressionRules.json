@@ -1,0 +1,8 @@
+{
+  "documentType": "ProgressionRulesDocument",
+  "version": "0.1.0",
+  "skillTrees": ["combat", "crafting", "exploration"],
+  "prestigeEnabled": false,
+  "craftingUnlockMode": "recipe_item",
+  "abilitySlots": 6
+}
