@@ -47,7 +47,9 @@ jobs:
       # crates.  The full client (nova-forge-voxygen) requires a Vulkan ICD that
       # isn't available on standard CI runners, so it is excluded here.
       - name: cargo check (server)
-        run: cargo check -p nova-forge-server-cli
+        run: |
+          cargo check -p nova-forge-server-cli
+          cargo check -p nova-forge-server-gui
 
       - name: cargo check (common crates)
         run: >
@@ -138,7 +140,9 @@ jobs:
             binutils gcc mold
 
       - name: clippy (server)
-        run: cargo clippy -p nova-forge-server-cli -- -D warnings
+        run: |
+          cargo clippy -p nova-forge-server-cli -- -D warnings
+          cargo clippy -p nova-forge-server-gui -- -D warnings
 
       - name: clippy (common crates)
         run: >
