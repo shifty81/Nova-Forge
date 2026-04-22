@@ -76,6 +76,7 @@
     (5.33, Item("common.items.recipes.metal.iron.iron_shoulder")),
     (5.33, Item("common.items.recipes.metal.iron.iron_head")),
     (5.33, Item("common.items.recipes.metal.iron.iron_weapons")),
+    (8.0, Item("common.items.recipes.weapons.bamboo.bamboo_weapons")),
     (4.27, Item("common.items.recipes.equipment.basic.seashell_necklace")),
     (4.27, Item("common.items.recipes.equipment.basic.knitted_red_pouch")),
     (4.27, Item("common.items.recipes.equipment.basic.steel_pickaxe")),

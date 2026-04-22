@@ -73,6 +73,21 @@ recipe-weapons-eldwood = Eldwood Weapon Recipes
 recipe-default = Default Recipes
     .desc = {""}
 
+recipe-weapons-bamboo-bamboo-weapons = Bamboo Weapons Recipe
+    .desc = {""}
+
+recipe-weapons-hardwood-hardwood-weapons = Hardwood Weapons Recipe
+    .desc = {""}
+
+recipe-weapons-ironwood-ironwood-weapons = Ironwood Weapons Recipe
+    .desc = {""}
+
+recipe-weapons-frostwood-frostwood-weapons = Frostwood Weapons Recipe
+    .desc = {""}
+
+recipe-weapons-eldwood-eldwood-weapons = Eldwood Weapons Recipe
+    .desc = {""}
+
 recipe-armor-leather-thick-leather = Thick Leather Recipe
     .desc = {""}
 
