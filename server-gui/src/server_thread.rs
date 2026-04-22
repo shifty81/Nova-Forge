@@ -113,8 +113,8 @@ pub fn run_server_thread(
 
                 for event in events {
                     match event {
-                        Event::ClientConnected { entity: _ } => info!("Client connected!"),
-                        Event::ClientDisconnected { entity: _ } => info!("Client disconnected!"),
+                        Event::ClientConnected { .. } => info!("Client connected!"),
+                        Event::ClientDisconnected { .. } => info!("Client disconnected!"),
                         Event::Chat { entity: _, msg } => info!("[Chat] {}", msg),
                     }
                 }

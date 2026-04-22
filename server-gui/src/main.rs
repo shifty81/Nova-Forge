@@ -10,6 +10,7 @@ static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 mod app;
 mod gui_log;
+mod launch_config;
 mod server_thread;
 
 use crate::{
@@ -17,7 +18,6 @@ use crate::{
     gui_log::{GuiLog, SharedLog, new_shared_log},
     server_thread::build_runtime,
 };
-use server::persistence::DatabaseSettings;
 use std::{
     path::PathBuf,
     sync::{
@@ -36,9 +36,6 @@ lazy_static::lazy_static! {
 
 fn main() -> eframe::Result<()> {
     // ── Init tracing first so all later messages are captured ────────────
-    //
-    // `LOG_WRITER` is a lazy_static so it satisfies the `'static` bound that
-    // `common_frontend::init` requires for its `terminal` argument.
     let _log_guards = common_frontend::init(None, &|| LOG_WRITER.clone());
 
     // ── Determine data directory ──────────────────────────────────────────
@@ -49,38 +46,22 @@ fn main() -> eframe::Result<()> {
         p
     };
 
-    // ── Load settings ─────────────────────────────────────────────────────
-    let server_settings = server::Settings::load(&server_data_dir);
-    let editable_settings = server::EditableSettings::load(&server_data_dir);
-
-    // ── Database settings ─────────────────────────────────────────────────
-    const PERSISTENCE_DB_DIR: &str = "saves";
-    let database_settings = DatabaseSettings {
-        db_dir: server_data_dir.join(PERSISTENCE_DB_DIR),
-        sql_log_mode: server::persistence::SqlLogMode::Disabled,
-    };
-
     // ── Tokio runtime ─────────────────────────────────────────────────────
     let runtime = build_runtime();
 
     // ── Stop flag (shared between GUI and server thread) ─────────────────
     let stop_flag = Arc::new(AtomicBool::new(false));
 
-    // ── Launch server background thread ──────────────────────────────────
-    let (cmd_tx, event_rx) = server_thread::run_server_thread(
-        server_data_dir,
-        server_settings,
-        editable_settings,
-        database_settings,
-        Arc::clone(&runtime),
-        Arc::clone(&stop_flag),
-    );
-
     // Clone the shared log Arc so the GUI can read it.
     let shared_log = Arc::clone(&*SHARED_LOG);
 
-    // ── Build the GUI app ─────────────────────────────────────────────────
-    let app = ServerApp::new(cmd_tx, event_rx, Arc::clone(&stop_flag), shared_log);
+    // ── Build the GUI app (server starts lazily on user action) ──────────
+    let app = ServerApp::new(
+        server_data_dir,
+        Arc::clone(&runtime),
+        Arc::clone(&stop_flag),
+        shared_log,
+    );
 
     let native_options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
@@ -96,4 +77,5 @@ fn main() -> eframe::Result<()> {
         Box::new(|_cc| Ok(Box::new(app))),
     )
 }
+
 
