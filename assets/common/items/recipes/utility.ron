@@ -10,6 +10,6 @@ ItemDef(
             "silver_ingot",
         ],
     ),
-    quality: Common,
+    quality: Rare,
     tags: [],
 )

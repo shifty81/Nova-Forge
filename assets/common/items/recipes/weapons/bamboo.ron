@@ -6,6 +6,6 @@ ItemDef(
             "bamboo_weapons",
         ],
     ),
-    quality: Common,
+    quality: Rare,
     tags: [],
 )

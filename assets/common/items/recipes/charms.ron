@@ -8,6 +8,6 @@ ItemDef(
             "lifesteal_charm",
         ],
     ),
-    quality: Common,
+    quality: Rare,
     tags: [],
 )

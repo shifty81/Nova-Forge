@@ -54,3 +54,4 @@ hud-crafting-recipe-uncraftable = Recipe Cannot be Crafted
 hud-crafting-recipe-unlearned = You must first learn how to craft this recipe.
 hud-crafting-show_unknown_recipes = Show Unknown Recipes
 hud-crafting-hide_unknown_recipes = Hide Unknown Recipes
+hud-crafting-section-unlearned = — Unlearned Recipes —

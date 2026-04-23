@@ -12,6 +12,6 @@ ItemDef(
             "sunflower_icetea",
         ],
     ),
-    quality: Common,
+    quality: Rare,
     tags: [],
 )
