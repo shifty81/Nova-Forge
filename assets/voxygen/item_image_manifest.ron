@@ -78,7 +78,7 @@
     ),
     Simple("common.items.crafting_tools.loom"): VoxTrans(
         "voxel.sprite.crafting_station.loom",
-        (0.0, 0.0, 0.0), (-100.0, 00.0, 0.0), 1.0,
+        (0.0, 0.0, 0.0), (-100.0, 0.0, 0.0), 1.0,
     ),
     Simple("common.items.crafting_tools.spinning_wheel"): VoxTrans(
         "voxel.sprite.crafting_station.spinning_wheel",

@@ -861,6 +861,7 @@ impl Widget for Crafting<'_> {
             let is_first_unlearned = at_station && !knows_recipe && !unlearned_header_shown;
             if is_first_unlearned {
                 if i > 0 {
+                    // There are known recipes above — show the divider header.
                     Text::new(
                         &self
                             .localized_strings
@@ -875,6 +876,11 @@ impl Widget for Crafting<'_> {
                     .parent(state.ids.align_rec)
                     .set(state.ids.unlearned_section_header, ui);
                 }
+                // Mark the flag regardless of whether the header was rendered.
+                // If i == 0 all recipes are unlearned so there is no known/unknown
+                // boundary and no header is needed; setting the flag here prevents
+                // it from being shown incorrectly between the first and second
+                // unlearned recipes on subsequent iterations.
                 unlearned_header_shown = true;
             }
 
