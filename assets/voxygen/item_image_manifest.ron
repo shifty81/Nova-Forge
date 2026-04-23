@@ -68,6 +68,26 @@
         "voxel.sprite.furniture.bonfire_M_lit",
         (0.0, 0.0, 0.0), (-50.0, 40.0, 20.0), 0.9,
     ),
+    Simple("common.items.crafting_tools.cooking_pot"): VoxTrans(
+        "voxel.sprite.crafting_station.cooking_pot",
+        (0.0, 0.0, 0.0), (0.0, 90.0, 90.0), 1.2,
+    ),
+    Simple("common.items.crafting_tools.cauldron"): VoxTrans(
+        "voxel.sprite.crafting_station.cauldron",
+        (0.0, 0.0, 0.0), (-50.0, 40.0, 30.0), 1.0,
+    ),
+    Simple("common.items.crafting_tools.loom"): VoxTrans(
+        "voxel.sprite.crafting_station.loom",
+        (0.0, 0.0, 0.0), (-100.0, 00.0, 0.0), 1.0,
+    ),
+    Simple("common.items.crafting_tools.spinning_wheel"): VoxTrans(
+        "voxel.sprite.crafting_station.spinning_wheel",
+        (0.0, 0.0, 0.0), (-70.0, 10.0, 0.0), 1.0,
+    ),
+    Simple("common.items.crafting_tools.tanning_rack"): VoxTrans(
+        "voxel.sprite.crafting_station.tanning_rack",
+        (0.0, 0.0, 0.0), (-90.0, 20.0, 0.0), 1.0,
+    ),
     // Recipe Icon
     Simple("Recipe"): VoxTrans(
         "voxel.item.recipe.recipe_basic",

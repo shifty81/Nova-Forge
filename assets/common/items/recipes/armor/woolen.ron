@@ -13,6 +13,6 @@ ItemDef(
             "woolen_head",
         ],
     ),
-    quality: Common,
+    quality: Rare,
     tags: [],
 )

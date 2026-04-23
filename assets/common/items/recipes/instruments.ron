@@ -19,6 +19,6 @@ ItemDef(
             "rhythmo",
         ],
     ),
-    quality: Common,
+    quality: Rare,
     tags: [],
 )

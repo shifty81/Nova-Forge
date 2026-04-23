@@ -20,6 +20,13 @@
             (10, "common.items.consumable.potion_big"),
             (10, "common.items.food.sunflower_icetea"),
             (1, "common.items.recipes.food"),
+            (1, "common.items.recipes.food.cactus_colada"),
+            (1, "common.items.recipes.food.apple_shroom_curry"),
+            (1, "common.items.recipes.food.salad_plain"),
+            (1, "common.items.recipes.food.salad_tomato"),
+            (1, "common.items.recipes.food.apples_stick"),
+            (1, "common.items.recipes.food.mushroom_stick"),
+            (1, "common.items.recipes.food.sunflower_icetea"),
         ],
     ),
     meta: [

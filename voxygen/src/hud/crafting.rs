@@ -103,6 +103,7 @@ widget_ids! {
         modular_wep_ing_1_bg,
         modular_wep_ing_2_bg,
         draggable_area,
+        unlearned_section_header,
     }
 }
 
@@ -690,7 +691,8 @@ impl Widget for Crafting<'_> {
             .available_recipes_iter(self.rbm)
             .map(|r| r.0.as_str())
             .collect::<HashSet<_>>();
-        let recipe_source = if self.settings.gameplay.show_all_recipes {
+        let at_station = self.show.crafting_fields.craft_sprite.is_some();
+        let recipe_source = if self.settings.gameplay.show_all_recipes || at_station {
             Either::Left(
                 self.rbm
                     .iter()
@@ -801,7 +803,7 @@ impl Widget for Crafting<'_> {
         });
 
         // Recipe list
-        let recipe_list_length = if self.settings.gameplay.show_all_recipes {
+        let recipe_list_length = if self.settings.gameplay.show_all_recipes || at_station {
             self.rbm.iter().count()
         } else {
             self.inventory.recipe_book_len()
@@ -839,17 +841,43 @@ impl Widget for Crafting<'_> {
                     .resize(recipe_list_length, &mut ui.widget_id_generator())
             });
         }
+        let mut unlearned_header_shown = false;
         for (i, (name, recipe, is_craftable, has_materials, knows_recipe)) in ordered_recipes
             .into_iter()
             .filter(|(_, recipe, _, _, _)| self.show.crafting_fields.crafting_tab.satisfies(recipe))
-            // When at a specific crafting station, hide recipes for which the player
+            // When at a specific crafting station, hide known recipes for which the player
             // does not have the required materials — they clutter the list and can't
-            // be made anyway.
-            .filter(|(_, _, _, has_materials, _)| {
-                self.show.crafting_fields.craft_sprite.is_none() || *has_materials
+            // be made anyway. Always show unlearned recipes so the player can discover them.
+            .filter(|(_, _, _, has_materials, knows_recipe)| {
+                self.show.crafting_fields.craft_sprite.is_none()
+                    || *has_materials
+                    || !knows_recipe
             })
             .enumerate()
         {
+            // Detect transition from known → unlearned when at a crafting station.
+            // The list is sorted so known recipes come first; render the section header
+            // exactly once, right before the first unlearned recipe.
+            let is_first_unlearned = at_station && !knows_recipe && !unlearned_header_shown;
+            if is_first_unlearned {
+                if i > 0 {
+                    Text::new(
+                        &self
+                            .localized_strings
+                            .get_msg("hud-crafting-section-unlearned"),
+                    )
+                    .down_from(state.ids.recipe_list_btns[i - 1], 8.0)
+                    .w(171.0)
+                    .font_id(self.fonts.cyri.conrod_id)
+                    .font_size(self.fonts.cyri.scale(11))
+                    .color(TEXT_GRAY_COLOR)
+                    .center_justify()
+                    .parent(state.ids.align_rec)
+                    .set(state.ids.unlearned_section_header, ui);
+                }
+                unlearned_header_shown = true;
+            }
+
             let button = Button::image(if state.selected_recipe.as_ref() == Some(name) {
                 self.imgs.selection
             } else {
@@ -858,6 +886,8 @@ impl Widget for Crafting<'_> {
             .and(|button| {
                 if i == 0 {
                     button.top_left_with_margins_on(state.ids.align_rec, 2.0, 7.0)
+                } else if is_first_unlearned && i > 0 {
+                    button.down_from(state.ids.unlearned_section_header, 4.0)
                 } else {
                     button.down_from(state.ids.recipe_list_btns[i - 1], 5.0)
                 }
