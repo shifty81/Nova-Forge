@@ -467,21 +467,6 @@ mod version {
         pvp: bool,
     }
 
-    impl V5 {
-        pub fn from_world(world: &SingleplayerWorld) -> Self {
-            V5 {
-                version: 5,
-                name: world.name.clone(),
-                gen_opts: world.gen_opts.clone(),
-                seed: world.seed,
-                day_length: world.day_length,
-                max_players: world.max_players,
-                use_experimental: world.use_experimental,
-                pvp: world.pvp,
-            }
-        }
-    }
-
     impl ToWorld for V5 {
         fn to_world(self, path: PathBuf) -> SingleplayerWorld {
             let map_path = path.join("map.bin");

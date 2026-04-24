@@ -464,6 +464,7 @@ impl<'a> InventoryScroller<'a> {
                     Quality::Common => self.imgs.inv_slot_common,
                     Quality::Moderate => self.imgs.inv_slot_green,
                     Quality::High => self.imgs.inv_slot_blue,
+                    Quality::Rare => self.imgs.inv_slot_purple,
                     Quality::Epic => self.imgs.inv_slot_purple,
                     Quality::Legendary => self.imgs.inv_slot_gold,
                     Quality::Artifact => self.imgs.inv_slot_orange,

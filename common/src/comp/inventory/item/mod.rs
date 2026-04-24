@@ -77,6 +77,7 @@ pub enum Quality {
     Common,    // Light blue
     Moderate,  // Green
     High,      // Blue
+    Rare,      // Blue-Purple
     Epic,      // Purple
     Legendary, // Gold
     Artifact,  // Orange
