@@ -382,6 +382,7 @@ impl Good {
             Quality::Common => 0.9,
             Quality::Moderate => 0.8,
             Quality::High => 0.6,
+            Quality::Rare => 0.55,
             Quality::Epic => 0.5,
             Quality::Legendary => 0.5,
             Quality::Artifact | Quality::Debug => 0.0,

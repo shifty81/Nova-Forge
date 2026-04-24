@@ -152,3 +152,51 @@ jobs:
           -p nova-forge-common-net
           -p nova-forge-query-server
           -- -D warnings
+
+  # ── Release build (master only) ──────────────────────────────────────────────
+  release-build:
+    name: release build
+    runs-on: ubuntu-latest
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        run: |
+          rustup toolchain install $RUSTUP_TOOLCHAIN --profile minimal
+          rustup override set $RUSTUP_TOOLCHAIN
+
+      - name: Cache Cargo registry + git deps
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-release-
+
+      - name: Install system libraries
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y --no-install-recommends \
+            libasound2-dev libxkbcommon-dev libwayland-dev libxi-dev \
+            libvulkan-dev glslang-tools cmake pkg-config \
+            binutils gcc mold
+
+      - name: cargo build --release
+        run: >
+          cargo build --release
+          --bin nova-forge-server-cli
+          --bin nova-forge-server-gui
+
+      - name: Upload server binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: nova-forge-server-bins
+          path: |
+            target/release/nova-forge-server-cli
+            target/release/nova-forge-server-gui

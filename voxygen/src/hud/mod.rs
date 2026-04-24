@@ -182,6 +182,7 @@ const QUALITY_COMMON: Color = Color::Rgba(0.79, 1.00, 1.00, 1.0); // Light blue 
 // keys), rewards for easy quests
 const QUALITY_MODERATE: Color = Color::Rgba(0.06, 0.69, 0.12, 1.0); // Green - Quest Rewards, commonly looted items from NPCs
 const QUALITY_HIGH: Color = Color::Rgba(0.18, 0.32, 0.9, 1.0); // Blue - Dungeon rewards, boss loot, rewards for hard quests
+const QUALITY_RARE: Color = Color::Rgba(0.39, 0.15, 0.75, 1.0); // Blue-Purple - Rare items, mid-tier dungeon drops
 const QUALITY_EPIC: Color = Color::Rgba(0.58, 0.29, 0.93, 1.0); // Purple - Rewards for epic quests and very hard bosses
 const QUALITY_LEGENDARY: Color = Color::Rgba(0.92, 0.76, 0.0, 1.0); // Gold - Legendary items that require a big effort to acquire
 const QUALITY_ARTIFACT: Color = Color::Rgba(0.74, 0.24, 0.11, 1.0); // Orange - Not obtainable by normal means, "artifacts"
@@ -5633,6 +5634,7 @@ pub fn get_quality_col(quality: Quality) -> Color {
         Quality::Common => QUALITY_COMMON,
         Quality::Moderate => QUALITY_MODERATE,
         Quality::High => QUALITY_HIGH,
+        Quality::Rare => QUALITY_RARE,
         Quality::Epic => QUALITY_EPIC,
         Quality::Legendary => QUALITY_LEGENDARY,
         Quality::Artifact => QUALITY_ARTIFACT,
