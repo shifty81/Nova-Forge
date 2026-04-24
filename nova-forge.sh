@@ -35,6 +35,7 @@ Commands:
   build          Fast dev build of both the client and server (default)
   run            Build & launch the game client (singleplayer / LAN host)
   server         Build & launch the dedicated server (standalone, no auth)
+  server-gui     Build & launch the server GUI (egui window)
   release        Optimised release build; copies assets beside the binaries
   run-release    Launch the already-built release client
   test           Run the workspace unit-test suite
@@ -65,7 +66,8 @@ Examples:
   ./nova-forge.sh build                     # dev build
   ./nova-forge.sh run                       # build & launch client
   ./nova-forge.sh run --no-egui             # launch without debug overlay
-  ./nova-forge.sh server                    # run dedicated LAN server
+  ./nova-forge.sh server                    # run dedicated LAN server (CLI)
+  ./nova-forge.sh server-gui                # run server GUI window
   ./nova-forge.sh release                   # optimised release build
   ./nova-forge.sh run-release               # launch the release client
   ./nova-forge.sh test                      # run all workspace tests
@@ -87,13 +89,13 @@ interactive_menu() {
     echo ""
     echo -e "  ${CYAN}1)${NC} Dev build        — fast debug build (client + server)"
     echo -e "  ${CYAN}2)${NC} Run client       — build & launch the game"
-    echo -e "  ${CYAN}3)${NC} Server           — build & launch dedicated server"
-    echo -e "  ${CYAN}4)${NC} Release build    — optimised build (+ copy assets)"
-    echo -e "  ${CYAN}5)${NC} Run release      — launch already-built release client"
-    echo -e "  ${CYAN}6)${NC} Test             — run workspace unit tests"
-    echo -e "  ${CYAN}7)${NC} Clean            — wipe target/ build artifacts"
-    echo -e "  ${CYAN}8)${NC} Rebuild          — clean then fresh dev build"
-    echo -e "  ${CYAN}9)${NC} Help             — show full usage"
+    echo -e "  ${CYAN}3)${NC} Server CLI       — build & launch dedicated server"
+    echo -e "  ${CYAN}4)${NC} Server GUI       — build & launch server GUI window"
+    echo -e "  ${CYAN}5)${NC} Release build    — optimised build (+ copy assets)"
+    echo -e "  ${CYAN}6)${NC} Run release      — launch already-built release client"
+    echo -e "  ${CYAN}7)${NC} Test             — run workspace unit tests"
+    echo -e "  ${CYAN}8)${NC} Clean            — wipe target/ build artifacts"
+    echo -e "  ${CYAN}9)${NC} Rebuild          — clean then fresh dev build"
     echo -e "  ${CYAN}0)${NC} Quit"
     echo ""
     local choice
@@ -102,12 +104,12 @@ interactive_menu() {
         1) COMMAND=build       ;;
         2) COMMAND=run         ;;
         3) COMMAND=server      ;;
-        4) COMMAND=release     ;;
-        5) COMMAND=run-release ;;
-        6) COMMAND=test        ;;
-        7) COMMAND=clean       ;;
-        8) COMMAND=rebuild     ;;
-        9) usage               ;;
+        4) COMMAND=server-gui  ;;
+        5) COMMAND=release     ;;
+        6) COMMAND=run-release ;;
+        7) COMMAND=test        ;;
+        8) COMMAND=clean       ;;
+        9) COMMAND=rebuild     ;;
         0) exit 0              ;;
         *) die "Invalid selection '$choice'. Run './nova-forge.sh help' for usage." ;;
     esac
@@ -276,9 +278,9 @@ _show_error_summary() {
     local exit_code="$1"
 
     echo ""
-    echo -e "${RED}${BOLD}╔══════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${RED}${BOLD}╔═══════════════════════════════════════════════════════╗${NC}"
     echo -e "${RED}${BOLD}║              BUILD FAILED — ERROR SUMMARY                ║${NC}"
-    echo -e "${RED}${BOLD}╚══════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${RED}${BOLD}╚═══════════════════════════════════════════════════════╝${NC}"
     echo ""
 
     # Rust compiler error headlines (error[Exxxx]: …) and file locations (-->).
@@ -448,11 +450,13 @@ cmd_build() {
     run_cargo cargo build \
         --bin nova-forge-voxygen \
         --bin nova-forge-server-cli \
+        --bin nova-forge-server-gui \
         --features "$feats" \
         "${CARGO_ARGS[@]}"
     info "Build complete."
-    info "  Client : target/debug/nova-forge-voxygen"
-    info "  Server : target/debug/nova-forge-server-cli"
+    info "  Client     : target/debug/nova-forge-voxygen"
+    info "  Server CLI : target/debug/nova-forge-server-cli"
+    info "  Server GUI : target/debug/nova-forge-server-gui"
 }
 
 cmd_run() {
@@ -469,13 +473,23 @@ cmd_run() {
 }
 
 cmd_server() {
-    section "Building & launching Nova-Forge dedicated server"
+    section "Building & launching Nova-Forge dedicated server (CLI)"
     info "No authentication required — any username accepted."
     info "LAN clients can connect to port 14004."
     run_cargo cargo run \
         --bin nova-forge-server-cli \
         "${CARGO_ARGS[@]}" \
         -- --no-auth
+}
+
+cmd_server_gui() {
+    section "Building & launching Nova-Forge server GUI"
+    info "GUI window — configure and start the server without a terminal."
+    run_cargo cargo build \
+        --bin nova-forge-server-gui \
+        "${CARGO_ARGS[@]}"
+    info "Launching server GUI..."
+    NOVA_FORGE_ASSETS="$NOVA_FORGE_ASSETS" target/debug/nova-forge-server-gui
 }
 
 cmd_release() {
@@ -487,10 +501,12 @@ cmd_release() {
         --features default-publish \
         --bin nova-forge-voxygen \
         --bin nova-forge-server-cli \
+        --bin nova-forge-server-gui \
         "${CARGO_ARGS[@]}"
     info "Release build complete."
-    info "  Client : target/release/nova-forge-voxygen"
-    info "  Server : target/release/nova-forge-server-cli"
+    info "  Client     : target/release/nova-forge-voxygen"
+    info "  Server CLI : target/release/nova-forge-server-cli"
+    info "  Server GUI : target/release/nova-forge-server-gui"
 
     # Copy the assets directory next to the release binaries so the client can
     # find them when launched directly (e.g. by double-clicking on Windows).
@@ -504,6 +520,8 @@ cmd_release() {
         cp -r assets "$dest"
         info "Assets copied to $dest."
     fi
+    # Ensure the plugins directory exists so the runtime does not log an error.
+    mkdir -p "$dest/plugins"
     info ""
     info "To run the release client:"
     info "  ./nova-forge.sh run-release"
@@ -547,6 +565,7 @@ case "$COMMAND" in
     build)       cmd_build       ;;
     run)         cmd_run         ;;
     server)      cmd_server      ;;
+    server-gui)  cmd_server_gui  ;;
     release)     cmd_release     ;;
     run-release) cmd_run_release ;;
     test)        cmd_test        ;;
